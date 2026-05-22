@@ -1,0 +1,166 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "AGENTS.md",
+    ".opencode/context/project.md",
+    ".opencode/context/workflow.md"
+  ],
+  "agent": {
+    "product-owner": {
+      "mode": "all",
+      "permission": {
+        "edit": "deny",
+        "bash": "ask",
+        "task": {
+          "*": "deny",
+          "tech-lead": "allow",
+          "documentation-maintainer": "allow"
+        }
+      }
+    },
+    "tech-lead": {
+      "mode": "all",
+      "permission": {
+        "edit": "deny",
+        "bash": "ask",
+        "task": {
+          "*": "deny",
+          "product-owner": "allow",
+          "orchestrator": "allow",
+          "documentation-maintainer": "allow",
+          "architecture-specialist": "allow",
+          "solution-maintainer": "allow"
+        }
+      }
+    },
+    "orchestrator": {
+      "mode": "all",
+      "permission": {
+        "edit": "deny",
+        "bash": "ask",
+        "task": {
+          "*": "deny",
+          "architecture-specialist": "allow",
+          "solution-maintainer": "allow",
+          "csharp-specialist": "allow",
+          "csharp-basic-specialist": "allow",
+          "csharp-advanced-specialist": "allow",
+          "database-specialist": "allow",
+          "database-basic-specialist": "allow",
+          "database-advanced-specialist": "allow",
+          "ux-specialist": "allow",
+          "cybersecurity-specialist": "allow",
+          "testing-specialist": "allow",
+          "qa-specialist": "allow",
+          "code-review-specialist": "allow",
+          "documentation-maintainer": "allow"
+        }
+      }
+    },
+    "documentation-maintainer": {
+      "mode": "subagent",
+      "permission": {
+        "edit": "ask",
+        "bash": "ask",
+        "task": {
+          "*": "deny",
+          "testing-specialist": "allow",
+          "code-review-specialist": "allow",
+          "qa-specialist": "allow",
+          "architecture-specialist": "allow"
+        }
+      }
+    },
+    "code-review-specialist": {
+      "mode": "subagent",
+      "permission": {
+        "edit": "deny",
+        "bash": "ask",
+        "task": {
+          "*": "deny",
+          "testing-specialist": "allow",
+          "cybersecurity-specialist": "allow",
+          "architecture-specialist": "allow",
+          "database-advanced-specialist": "allow",
+          "csharp-advanced-specialist": "allow"
+        }
+      }
+    },
+    "testing-specialist": {
+      "mode": "subagent",
+      "permission": {
+        "edit": "ask",
+        "bash": "ask",
+        "task": {
+          "*": "deny",
+          "qa-specialist": "allow",
+          "code-review-specialist": "allow",
+          "cybersecurity-specialist": "allow"
+        }
+      }
+    },
+    "qa-specialist": {
+      "mode": "subagent",
+      "permission": {
+        "edit": "deny",
+        "bash": "ask",
+        "task": {
+          "*": "deny",
+          "testing-specialist": "allow",
+          "code-review-specialist": "allow",
+          "cybersecurity-specialist": "allow"
+        }
+      }
+    },
+    "cybersecurity-specialist": {
+      "mode": "subagent",
+      "permission": {
+        "edit": "deny",
+        "bash": "ask",
+        "task": {
+          "*": "deny",
+          "testing-specialist": "allow",
+          "code-review-specialist": "allow",
+          "database-advanced-specialist": "allow"
+        }
+      }
+    },
+    "csharp-specialist": {
+      "mode": "subagent",
+      "permission": {
+        "edit": "deny",
+        "bash": "ask",
+        "task": {
+          "*": "deny",
+          "csharp-basic-specialist": "allow",
+          "csharp-advanced-specialist": "allow"
+        }
+      }
+    },
+    "database-specialist": {
+      "mode": "subagent",
+      "permission": {
+        "edit": "deny",
+        "bash": "ask",
+        "task": {
+          "*": "deny",
+          "database-basic-specialist": "allow",
+          "database-advanced-specialist": "allow"
+        }
+      }
+    },
+    "solution-maintainer": {
+      "description": "Maintains solution files, project references and src/tests organization.",
+      "mode": "subagent",
+      "permission": {
+        "edit": "ask",
+        "bash": "ask",
+        "task": {
+          "*": "deny",
+          "testing-specialist": "allow",
+          "code-review-specialist": "allow"
+        }
+      }
+    }
+  }
+}
