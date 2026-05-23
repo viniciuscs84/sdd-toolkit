@@ -17,14 +17,14 @@ Each agent is a focused role. Use them to make AI-assisted work easier to plan, 
 
 ## Quality agents
 
-- `code-review-specialist.md`: reviews diffs, risks, scope, maintainability, tests and merge readiness.
+- `review-specialist.md`: reviews diffs, risks, scope, maintainability, tests and merge readiness.
 - `testing-specialist.md`: defines and implements automated testing strategy across unit, integration, regression, smoke and E2E tests.
-- `qa-specialist.md`: validates acceptance criteria, exploratory scenarios, release risk and product quality.
+- `acceptance-specialist.md`: validates acceptance criteria, exploratory scenarios, release risk and product quality.
 - `cybersecurity-specialist.md`: performs security pre-check and final security review for tasks with security impact.
 
 ## Documentation agents
 
-- `documentation-maintainer.md`: reviews and maintains documentation, specs, links and workflow consistency. It should be called at the end of each wave before closure.
+- `docs-maintainer.md`: reviews and maintains documentation, specs, links and workflow consistency. It should be called at the end of each wave before closure.
 
 ## Specialist agents
 
@@ -40,10 +40,10 @@ Each agent is a focused role. Use them to make AI-assisted work easier to plan, 
 
 - Planning agents do not edit code.
 - Orchestrator does not edit code directly.
-- Every task must report code-review, tests, QA and security gates.
+- Every task must report review, tests, acceptance and security gates.
 - Lightweight task categories may simplify checklists, but do not remove gates.
 - Tasks with potential security impact must call `cybersecurity-specialist.md` at the beginning and end.
-- Tasks with documentation changes must call `testing-specialist.md` and `code-review-specialist.md` at the end.
+- Tasks with documentation changes must call `testing-specialist.md` and `review-specialist.md` at the end.
 - Parallel execution is allowed only when tasks have no dependency, no shared critical files and no meaningful impact overlap.
 
 ## Review principle
