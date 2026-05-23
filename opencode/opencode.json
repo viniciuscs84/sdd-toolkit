@@ -14,7 +14,7 @@
         "task": {
           "*": "deny",
           "tech-lead": "allow",
-          "documentation-maintainer": "allow"
+          "docs-maintainer": "allow"
         }
       }
     },
@@ -27,7 +27,7 @@
           "*": "deny",
           "product-owner": "allow",
           "orchestrator": "allow",
-          "documentation-maintainer": "allow",
+          "docs-maintainer": "allow",
           "architecture-specialist": "allow",
           "solution-maintainer": "allow"
         }
@@ -51,13 +51,13 @@
           "ux-specialist": "allow",
           "cybersecurity-specialist": "allow",
           "testing-specialist": "allow",
-          "qa-specialist": "allow",
-          "code-review-specialist": "allow",
-          "documentation-maintainer": "allow"
+          "acceptance-specialist": "allow",
+          "review-specialist": "allow",
+          "docs-maintainer": "allow"
         }
       }
     },
-    "documentation-maintainer": {
+    "docs-maintainer": {
       "mode": "subagent",
       "permission": {
         "edit": "ask",
@@ -65,13 +65,13 @@
         "task": {
           "*": "deny",
           "testing-specialist": "allow",
-          "code-review-specialist": "allow",
-          "qa-specialist": "allow",
+          "review-specialist": "allow",
+          "acceptance-specialist": "allow",
           "architecture-specialist": "allow"
         }
       }
     },
-    "code-review-specialist": {
+    "review-specialist": {
       "mode": "subagent",
       "permission": {
         "edit": "deny",
@@ -93,13 +93,13 @@
         "bash": "ask",
         "task": {
           "*": "deny",
-          "qa-specialist": "allow",
-          "code-review-specialist": "allow",
+          "acceptance-specialist": "allow",
+          "review-specialist": "allow",
           "cybersecurity-specialist": "allow"
         }
       }
     },
-    "qa-specialist": {
+    "acceptance-specialist": {
       "mode": "subagent",
       "permission": {
         "edit": "deny",
@@ -107,7 +107,7 @@
         "task": {
           "*": "deny",
           "testing-specialist": "allow",
-          "code-review-specialist": "allow",
+          "review-specialist": "allow",
           "cybersecurity-specialist": "allow"
         }
       }
@@ -120,7 +120,7 @@
         "task": {
           "*": "deny",
           "testing-specialist": "allow",
-          "code-review-specialist": "allow",
+          "review-specialist": "allow",
           "database-advanced-specialist": "allow"
         }
       }
@@ -158,7 +158,7 @@
         "task": {
           "*": "deny",
           "testing-specialist": "allow",
-          "code-review-specialist": "allow"
+          "review-specialist": "allow"
         }
       }
     }
