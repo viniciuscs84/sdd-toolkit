@@ -12,7 +12,7 @@ Each agent is a focused role. Use them to make AI-assisted work easier to plan, 
 
 ## Routing agents
 
-- `csharp-specialist.md`: routes C#/.NET tasks to the basic or advanced C# specialist.
+- `csharp-specialist.md`: routes C#/.NET tasks to the basic or senior C# specialist.
 - `database-specialist.md`: routes persistence/database tasks to the basic or advanced database specialist.
 
 ## Quality agents
@@ -31,7 +31,7 @@ Each agent is a focused role. Use them to make AI-assisted work easier to plan, 
 - `architecture-specialist.md`: solution boundaries, project dependencies, framework design and long-term maintainability.
 - `solution-maintainer.md`: solution files, project paths, project references and source/test organization.
 - `csharp-basic-specialist.md`: simple C# changes, models, DTOs, enums, direct tests and small readability fixes.
-- `csharp-advanced-specialist.md`: public APIs, advanced generics, reflection, performance, async complexity and deep refactoring.
+- `csharp-senior-specialist.md`: public APIs, advanced generics, reflection, performance, async complexity and deep refactoring.
 - `database-basic-specialist.md`: simple mappings, small non-destructive migrations and simple queries.
 - `database-advanced-specialist.md`: complex migrations, data transformation, performance, indexes, transactions and advanced SQL.
 - `ux-specialist.md`: user flows, UI metadata, screens, interaction design and developer experience.
