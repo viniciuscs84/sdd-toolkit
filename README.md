@@ -26,13 +26,9 @@ idea / issue
 ## What is included
 
 ```text
-opencode/
-├── opencode.json
-├── AGENTS.md
-├── .opencode/
-│   ├── agents/
-│   └── context/
-└── skills/
+agents/               reusable agent definitions
+skills/               reusable skills for SDD tasks
+opencode/             OpenCode configuration and context
 ```
 
 Included agent roles:
@@ -44,33 +40,40 @@ Included agent roles:
 - Solution Maintainer
 - C# Specialist
 - C# Basic Specialist
-- C# Advanced Specialist
+- C# Senior Specialist
 - Database Specialist
 - Database Basic Specialist
 - Database Advanced Specialist
 - UX Specialist
 - Cybersecurity Specialist
 - Testing Specialist
-- QA Specialist
-- Code Review Specialist
-- Documentation Maintainer
+- Acceptance Specialist
+- Review Specialist
+- Docs Maintainer
 
 ## How to use
 
-Copy the contents of `opencode/` into the root of your own repository:
+For general reuse, copy the root folders you need:
+
+```bash
+cp -r agents /path/to/your-project/
+cp -r skills /path/to/your-project/
+```
+
+For OpenCode usage, also copy the OpenCode configuration:
 
 ```bash
 cp -r opencode/* /path/to/your-project/
-cp -r opencode/.opencode /path/to/your-project/
 ```
 
 Then customize:
 
-1. `AGENTS.md`
-2. `.opencode/context/project.md`
-3. `.opencode/context/workflow.md`
-4. agent descriptions under `.opencode/agents/`
-5. `opencode.json` permissions and allowed agent routing
+1. `agents/agent-catalog.md`
+2. `skills/`
+3. `opencode/AGENTS.md`
+4. `opencode/.opencode/context/project.md`
+5. `opencode/.opencode/context/workflow.md`
+6. `opencode/opencode.json` permissions and allowed agent routing
 
 ## Design principles
 
@@ -86,9 +89,9 @@ Then customize:
 
 Every task should report these gates:
 
-- `code-review`
+- `review`
 - `tests`
-- `qa`
+- `acceptance`
 - `security`
 
 Allowed states:
@@ -112,9 +115,9 @@ This toolkit includes C#/.NET and database-focused agents because that is the or
 
 When you add a new specialist, also update:
 
-- `.opencode/agents/agent-catalog.md`
-- `opencode.json`
-- `.opencode/context/workflow.md`
+- `agents/agent-catalog.md`
+- `opencode/opencode.json`
+- `opencode/.opencode/context/workflow.md`
 
 ## Repository status
 
