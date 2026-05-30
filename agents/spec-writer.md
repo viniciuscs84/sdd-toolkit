@@ -1,6 +1,6 @@
 ---
 description: Writes formal SDD specifications from requirements approved by the Product Owner and the human stakeholder.
-mode: all
+mode: subagent
 ---
 
 # Spec Writer Agent
