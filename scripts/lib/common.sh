@@ -49,6 +49,7 @@ validate_common_sources() {
   require_source_dir "$repo_root" "skills"
   require_source_dir "$repo_root" "context"
   require_source_dir "$repo_root" "docs/templates"
+  require_source_dir "$repo_root" "config"
 }
 
 print_done() {
