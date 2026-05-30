@@ -6,7 +6,7 @@ This document defines how humans and agents collaborate in the SDD Toolkit.
 
 Do not skip from idea directly to implementation.
 
-Every meaningful change should move through human-guided clarification, specification, planning, execution coordination and explicit validation.
+Every meaningful change should move through human-guided clarification, environment setup, specification, planning, execution coordination and explicit validation.
 
 ## Authority model
 
@@ -16,21 +16,33 @@ The human is the final authority for:
 - requirement approval
 - scope decisions
 - technical details that are not already defined
+- AI platform and environment decisions
+- model routing decisions when availability or cost is unclear
 - risk acceptance
 - third-party skill adoption
 - release readiness
 
-Agents assist with clarification, writing, planning, recruiting, skill building, execution coordination, quality checks and documentation.
+Agents assist with clarification, environment setup, writing, planning, recruiting, skill building, execution coordination, quality checks and documentation.
 
 ## Human-facing agents
 
 Humans may interact directly with:
 
 - `product-owner.md` for project setup, product clarification, requirement approval flow and readiness checks.
+- `env-configr.md` for development environment, AI platform, model routing, setup scripts and communication rules.
 - `tech-lead.md` for technical planning, wave/task planning, dependency validation and project/task-management consistency.
 - `orchestrator.md` for execution coordination of planned tasks or explicit human-approved ad hoc tasks.
 
 All other active agents are subagents.
+
+## Communication rules
+
+- Inter-agent communication defaults to English.
+- Specialized agents communicating with models should use the `caveman` skill by default to reduce token usage while preserving technical accuracy.
+- Human interaction must adapt to the human's language.
+- Human-facing artifacts must follow the language expected by the human or project context.
+- Do not force English for human-facing artifacts unless the project explicitly requires it.
+- Do not use caveman compression with humans unless the human explicitly asks for it.
 
 ## Work modes
 
@@ -38,6 +50,7 @@ Before acting, identify the current mode:
 
 ```text
 project setup
+environment configuration
 product clarification
 context maintenance
 specification writing
@@ -53,7 +66,7 @@ documentation maintenance
 
 ### Human stakeholder
 
-Approves product direction, requirement scope, missing project definitions, major risks and release decisions.
+Approves product direction, requirement scope, missing project definitions, environment decisions, major risks and release decisions.
 
 ### Product Owner
 
@@ -62,6 +75,16 @@ Asks the human the questions needed to configure the project, clarifies product 
 The Product Owner owns product-context decisions and must notify the human when the project is ready to start execution planning.
 
 The Product Owner must not infer technical details. Undefined technical details must be asked to the human or routed to the Tech Lead.
+
+During early project setup, Product Owner calls Env Configr when environment, AI platform, model routing or communication rules are undefined.
+
+### Env Configr
+
+Configures development environment and AI-agent environment with the human or Product Owner.
+
+It handles AI platform selection, setup script guidance, model routing, communication rules and environment-specific instructions for Agent Recruiter and Skill Builder.
+
+It must not guess models, subscription features, platform capabilities or credentials.
 
 ### Context Maintainer
 
@@ -89,6 +112,8 @@ The Tech Lead does not implement code.
 
 Creates or configures project-specific implementation agents from `agent-blueprints/` when the active agents are not specific enough for the stack.
 
+It receives environment/platform instructions from Env Configr when environment-specific configuration exists.
+
 It does not implement project features.
 
 ### Skill Builder
@@ -96,6 +121,8 @@ It does not implement project features.
 Creates, adapts or recommends skills required by recruited agents.
 
 It may use official documentation, web research and optionally skills.sh only when the user provides their own authentication token for the current task.
+
+It receives environment/platform instructions from Env Configr when environment-specific configuration exists.
 
 It does not recruit agents or implement project features.
 
@@ -128,8 +155,10 @@ It is different from Context Maintainer, which manages agent-facing operational 
 idea / issue / request
 -> Product Owner asks project setup and product clarification questions
 -> Product Owner identifies definition gaps
+-> Product Owner calls Env Configr for environment, AI platform, model routing and communication setup
 -> human provides or approves missing definitions
 -> Context Maintainer records approved context when durable context changes
+-> Env Configr calls Agent Recruiter and Skill Builder with environment/platform instructions when needed
 -> Product Owner calls Spec Writer after requirement approval
 -> Spec Writer writes SDD specification
 -> Tech Lead verifies spec, stack, agents and skills before planning
@@ -184,10 +213,16 @@ A task cannot be finalized while any gate is missing or failed.
 
 ## Mandatory rules
 
-- Product Owner, Tech Lead and Orchestrator are available to humans.
+- Product Owner, Env Configr, Tech Lead and Orchestrator are available to humans.
 - All other active agents are subagents.
 - Product Owner must ask for missing project definitions and must not infer technical details.
+- Product Owner must call Env Configr during early project setup when environment, AI platform, model routing or communication rules are undefined.
 - Product Owner must notify the human when the project is ready for execution planning.
+- Env Configr must not guess models, subscription features, platform capabilities or credentials.
+- Env Configr must pass environment and platform instructions to Agent Recruiter and Skill Builder when they are called.
+- Inter-agent communication must default to English.
+- Agents should use the `caveman` skill for inter-agent and specialized model communication by default.
+- Human interaction and human-facing artifacts must adapt to the human's language.
 - Tech Lead must not plan work outside the approved spec.
 - Tech Lead must not start planning until stack, required agents and required skills are defined or explicitly not needed.
 - Tech Lead must keep task dependencies consistent and coherent.
