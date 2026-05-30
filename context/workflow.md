@@ -47,6 +47,51 @@ All other active agents are subagents.
 - When an agent detects that Tech Lead work is required, it must tell the human to call Tech Lead.
 - When an agent detects that execution coordination is required, it must tell the human whether the next step is Tech Lead planned execution or human-approved ad hoc Orchestrator invocation.
 
+## Specialist readiness rules
+
+Product Owner and Tech Lead must both verify specialist readiness before the project moves toward execution.
+
+Product Owner verifies specialist readiness before telling the human that a saved spec is ready for Tech Lead planning.
+
+Tech Lead independently verifies specialist readiness again before planning waves, planning tasks or marking tasks ready for execution.
+
+Required specialists and skills must be either:
+
+- created and available, or
+- explicitly marked as not required for the current scope.
+
+Do not allow execution readiness when required specialists or required skills are missing.
+
+## Specialist execution rules
+
+Orchestrator must not implement directly.
+
+Orchestrator must call the appropriate specialists for implementation, validation, review and documentation work.
+
+If a required specialist cannot be called, Orchestrator must not silently proceed. It must report:
+
+- which specialist could not be called
+- why the specialist is required
+- what prevented the call
+- which agent should resolve the gap
+- whether the task is blocked or can proceed only in a reduced non-implementation mode
+
+## Agent limit handling
+
+When a called specialist reaches a model limit, context limit, output limit, rate limit or similar agent/model-imposed limit, the calling agent must not immediately propagate that as final failure.
+
+The calling agent must retry by reformulating, narrowing, chunking or splitting the request while the calling agent still has capacity and the task remains safe.
+
+Stop only when:
+
+- the calling agent's own limit is reached
+- repeated retries produce no useful progress
+- the task becomes unsafe
+- required context is missing
+- a human decision is required
+
+When stopping, report what was retried, what still failed and the next required action.
+
 ## Artifact persistence rules
 
 Agents must save every durable artifact to disk.
@@ -114,6 +159,10 @@ During early project setup, Product Owner calls Env Configr when environment, AI
 
 Product Owner must not call Tech Lead or Orchestrator.
 
+Product Owner must not say the project is ready for technical planning while required specialists or required skills are missing.
+
+Product Owner must never say the project is ready for execution; execution readiness is controlled later by Tech Lead and Orchestrator rules.
+
 ### Env Configr
 
 Configures development environment and AI-agent environment with the human or Product Owner.
@@ -150,6 +199,8 @@ To execute a planned task, it calls the Orchestrator with the task details.
 
 The Tech Lead can only be invoked by a human.
 
+The Tech Lead must independently verify specialist readiness before planning or marking tasks ready for execution.
+
 The Tech Lead must save generated wave and task artifacts to disk before reporting completion.
 
 The Tech Lead does not implement code.
@@ -180,7 +231,9 @@ It identifies agents capable of executing the task, calls them, coordinates exec
 
 The Orchestrator can only be invoked by Tech Lead or by a human.
 
-It does not implement code directly and does not bypass gates.
+It must not implement directly and must not execute implementation work without calling required specialists.
+
+It does not bypass gates.
 
 ### Quality gate agents
 
@@ -209,11 +262,13 @@ idea / issue / request
 -> human provides or approves missing definitions
 -> Context Maintainer records approved context when durable context changes
 -> Env Configr calls Agent Recruiter and Skill Builder with environment/platform instructions when needed
+-> Product Owner verifies required specialists and skills are created or explicitly not required
 -> Product Owner calls Spec Writer after requirement approval
 -> Spec Writer writes and saves SDD specification to disk
 -> Product Owner tells human that the saved spec is ready for Tech Lead planning
 -> human calls Tech Lead
 -> Tech Lead verifies saved spec, stack, agents and skills before planning
+-> Tech Lead independently verifies specialist readiness
 -> Tech Lead plans and saves waves and tasks with coherent dependencies
 -> Tech Lead syncs milestones/tasks through project-management specialist when integration exists
 -> Tech Lead calls Agent Recruiter when stack-specific agents are needed
@@ -221,7 +276,9 @@ idea / issue / request
 -> Skill Builder researches, recommends or drafts skills
 -> Agent Recruiter finalizes recruited agents and skill assignments
 -> Tech Lead calls Orchestrator with saved task execution details
--> Orchestrator identifies capable agents and coordinates task execution
+-> Orchestrator identifies required specialists and calls them
+-> Orchestrator stops and reports missing specialists instead of implementing directly
+-> Orchestrator retries/splits specialist calls when a specialist hits model/context limits and Orchestrator capacity remains
 -> Orchestrator enforces document consistency, artifact persistence and quality gates
 -> Quality gate agents validate review, tests, acceptance and security
 -> failed gates trigger correction cycles or replanning
@@ -271,6 +328,8 @@ A task cannot be finalized while any gate is missing or failed.
 - Orchestrator can only be invoked by Tech Lead or by a human.
 - Product Owner must not call Tech Lead.
 - Product Owner must not call Orchestrator.
+- Product Owner must verify specialist readiness before saying a saved spec is ready for Tech Lead planning.
+- Product Owner must never say the project is ready for execution.
 - Product Owner must ask for missing project definitions and must not infer technical details.
 - Product Owner must call Env Configr during early project setup when environment, AI platform, model routing or communication rules are undefined.
 - Product Owner must notify the human when a saved spec is ready for Tech Lead planning.
@@ -281,13 +340,19 @@ A task cannot be finalized while any gate is missing or failed.
 - Human interaction and human-facing artifacts must adapt to the human's language.
 - Every durable artifact must be saved to disk before completion is reported.
 - Spec Writer must save specs to disk.
+- Tech Lead must independently verify specialist readiness before planning or marking tasks ready for execution.
 - Tech Lead must not plan from chat-only specs when a durable spec file is expected.
 - Tech Lead must save waves and tasks to disk.
 - Tech Lead must not plan work outside the approved spec.
 - Tech Lead must not start planning until stack, required agents and required skills are defined or explicitly not needed.
+- Tech Lead must not mark tasks ready for execution while required specialists or skills are missing.
 - Tech Lead must keep task dependencies consistent and coherent.
 - Tech Lead must call Orchestrator to execute planned tasks.
 - Orchestrator must reject invocation from any agent except Tech Lead.
-- Orchestrator must identify capable agents and call them.
+- Orchestrator must identify capable specialists and call them.
+- Orchestrator must not implement directly.
+- Orchestrator must not execute implementation work without calling required specialists.
+- Orchestrator must report missing or uncallable specialists instead of silently skipping them.
+- Calling agents must retry, narrow or split requests when a called agent hits a model/context/rate/output limit, while the calling agent still has capacity.
 - Orchestrator must enforce document consistency, artifact persistence and quality gates.
 - Every task must report `review`, `tests`, `acceptance` and `security` gates.
