@@ -1,13 +1,15 @@
 # SDD Specialist Agents Catalog
 
-This directory defines specialist agents for Specification-Driven Development.
+This directory defines active agents for Specification-Driven Development.
 
-Each agent is a focused role. Use them to make AI-assisted work easier to plan, execute and review.
+Use active agents to plan, coordinate, validate and maintain SDD work. Use `agent-blueprints/` when a project needs stack-specific implementation agents.
 
 ## Core SDD agents
 
-- `product-owner.md`: clarifies product goals, user value, scope, priorities and acceptance criteria before technical planning starts.
+- `product-owner.md`: clarifies product goals, user value, scope, priorities and acceptance criteria with the human stakeholder before technical planning starts.
+- `spec-writer.md`: writes formal SDD specifications from requirements approved by the Product Owner and the human stakeholder.
 - `tech-lead.md`: turns approved specs into waves and executable tasks, estimates size, maps required specialists and sends ready work to the Orchestrator. It does not change code directly.
+- `agent-recruiter.md`: recruits and configures project-specific implementation agents from `agent-blueprints/`, assigning the skills each agent needs for the project stack.
 - `orchestrator.md`: coordinates execution of planned tasks, selects specialists, verifies gates and reports status back to the Tech Lead. It does not implement code directly.
 
 ## Quality gate agents
@@ -24,26 +26,39 @@ Each agent is a focused role. Use them to make AI-assisted work easier to plan, 
 ## General technical agents
 
 - `architecture-specialist.md`: reviews system boundaries, module responsibilities, dependencies, public contracts and long-term maintainability.
-- `solution-maintainer.md`: maintains repository structure, solution files, project references, source/test organization and build structure.
 - `ux-specialist.md`: reviews user flows, screen behavior, interaction states, copy clarity, accessibility concerns and developer experience.
 
-## Technology-specific agents
+## Agent blueprints
 
-- `csharp-basic-specialist.md`: handles simple C# changes, models, DTOs, enums, direct tests and small readability fixes.
-- `csharp-senior-specialist.md`: handles public APIs, advanced generics, reflection, performance, async complexity and deep refactoring.
-- `database-basic-specialist.md`: handles simple mappings, small non-destructive migrations and straightforward queries.
-- `database-advanced-specialist.md`: handles complex migrations, data transformation, performance, indexes, transactions and advanced SQL.
+Blueprints are not the default active implementation team. They are templates used by `agent-recruiter.md` to create stack-specific implementation agents for a project.
 
-## Optional routing agents
+Available blueprints:
 
-- `csharp-specialist.md`: routes C#/.NET tasks to the basic or senior C# specialist.
-- `database-specialist.md`: routes persistence/database tasks to the basic or advanced database specialist.
+- `agent-blueprints/stack-specialist.md`: base template for a concrete technology stack or framework specialist.
+- `agent-blueprints/frontend-specialist.md`: template for a project-specific frontend implementation agent.
+- `agent-blueprints/backend-specialist.md`: template for a project-specific backend implementation agent.
+- `agent-blueprints/api-specialist.md`: template for a project-specific API implementation agent.
+- `agent-blueprints/data-specialist.md`: template for a project-specific data implementation agent.
+- `agent-blueprints/devops-specialist.md`: template for a project-specific DevOps implementation agent.
 
-Routing agents are useful when the Orchestrator needs a second pass on complexity before selecting the final executor. They are optional for small teams or simple workflows.
+## Recommended flow
+
+1. Product Owner debates and approves the requirement with the human stakeholder.
+2. Product Owner calls Spec Writer.
+3. Spec Writer writes the SDD specification.
+4. Tech Lead turns the spec into waves and executable tasks.
+5. Tech Lead calls Agent Recruiter when implementation requires stack-specific agents.
+6. Agent Recruiter creates or configures implementation agents from blueprints and assigns required skills.
+7. Orchestrator coordinates execution using active agents and recruited agents.
+8. Quality gate agents validate `review`, `tests`, `acceptance` and `security`.
+9. Docs Maintainer updates documentation before wave closure.
 
 ## Mandatory rules
 
+- Product Owner approves requirements with the human before calling Spec Writer.
+- Spec Writer writes specs; it does not approve requirements or plan implementation tasks.
 - Planning agents do not edit code.
+- Agent Recruiter creates or configures agents; it does not implement project features.
 - The Orchestrator does not implement code directly.
 - Every task must report `review`, `tests`, `acceptance` and `security` gates.
 - Lightweight task categories may simplify checklists, but do not remove gates.
