@@ -77,6 +77,7 @@ function Test-CommonSources {
     Require-SourceDir -RepoRoot $RepoRoot -RelativePath 'skills'
     Require-SourceDir -RepoRoot $RepoRoot -RelativePath 'context'
     Require-SourceDir -RepoRoot $RepoRoot -RelativePath 'docs/templates'
+    Require-SourceDir -RepoRoot $RepoRoot -RelativePath 'config'
 }
 
 function Write-Done {
