@@ -70,13 +70,19 @@ docs/templates/
 config/
 ```
 
-## Model routing configuration
+## Configuration files
 
-Each platform setup copies `config/model-routing.example.yml` into the generated platform folder.
+Each platform setup copies these JSON configuration examples into the generated platform folder:
 
-After setup, copy or rename it to the platform-specific configuration file your tooling expects and replace placeholder model names with models available in your subscription.
+```text
+config/model-routing.example.json
+config/mcp-config.example.json
+config/readiness-matrix.example.json
+```
 
-The toolkit intentionally does not ship fixed model names because availability and cost depend on the user's platform, provider and plan.
+After setup, copy or rename them to the platform-specific configuration files your tooling expects and replace placeholder values with project-specific values.
+
+The toolkit intentionally does not ship fixed model names or credentials because availability, cost and security requirements depend on the user's platform, provider and plan.
 
 ## Generated locations
 
