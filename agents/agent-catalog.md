@@ -63,9 +63,9 @@ Use templates to keep specs, waves and tasks traceable:
 
 Use configuration templates to adapt SDD Toolkit to the project and platform:
 
-- `config/model-routing.example.yml`: model profiles, routing rules and communication defaults.
-- `config/mcp-config.example.yml`: MCP server policy, readiness and safety rules.
-- `config/readiness-matrix.example.yml`: stage-based definition readiness matrix.
+- `config/model-routing.example.json`: model profiles, routing rules and communication defaults.
+- `config/mcp-config.example.json`: MCP server policy, readiness and safety rules.
+- `config/readiness-matrix.example.json`: stage-based definition readiness matrix.
 
 ## Context folder
 
