@@ -15,17 +15,29 @@ The human is the final authority for:
 - product direction
 - requirement approval
 - scope decisions
+- technical details that are not already defined
 - risk acceptance
 - third-party skill adoption
 - release readiness
 
 Agents assist with clarification, writing, planning, recruiting, skill building, execution coordination, quality checks and documentation.
 
+## Human-facing agents
+
+Humans may interact directly with:
+
+- `product-owner.md` for project setup, product clarification, requirement approval flow and readiness checks.
+- `tech-lead.md` for technical planning, wave/task planning, dependency validation and project/task-management consistency.
+- `orchestrator.md` for execution coordination of planned tasks or explicit human-approved ad hoc tasks.
+
+All other active agents are subagents.
+
 ## Work modes
 
 Before acting, identify the current mode:
 
 ```text
+project setup
 product clarification
 context maintenance
 specification writing
@@ -41,13 +53,15 @@ documentation maintenance
 
 ### Human stakeholder
 
-Approves product direction, requirement scope, major risks and release decisions.
+Approves product direction, requirement scope, missing project definitions, major risks and release decisions.
 
 ### Product Owner
 
-Clarifies product value, users, scope, priorities and acceptance direction with the human stakeholder.
+Asks the human the questions needed to configure the project, clarifies product value, identifies definition gaps and calls subagents to record approved setup work.
 
-The Product Owner owns product-context decisions but does not maintain the context files directly.
+The Product Owner owns product-context decisions and must notify the human when the project is ready to start execution planning.
+
+The Product Owner must not infer technical details. Undefined technical details must be asked to the human or routed to the Tech Lead.
 
 ### Context Maintainer
 
@@ -63,11 +77,13 @@ It does not approve requirements and does not plan implementation tasks.
 
 ### Tech Lead
 
-Turns approved specs into waves and executable tasks.
+Interacts with humans to plan approved specs into coherent waves and executable tasks.
 
-It defines task scope, branch strategy, size, category, risks, validation expectations, required agents and gates.
+It validates dependencies, required agents, required skills, task order and consistency with project/task-management systems.
 
-It does not implement code.
+To execute a planned task, it calls the Orchestrator with the task details.
+
+The Tech Lead does not implement code.
 
 ### Agent Recruiter
 
@@ -85,7 +101,9 @@ It does not recruit agents or implement project features.
 
 ### Orchestrator
 
-Coordinates execution of planned tasks using active agents and recruited agents.
+Coordinates execution of planned tasks received from the Tech Lead and explicit human-approved ad hoc tasks.
+
+It identifies agents capable of executing the task, calls them, coordinates execution, enforces document consistency and ensures quality gates are followed.
 
 It does not implement code directly and does not bypass gates.
 
@@ -108,18 +126,22 @@ It is different from Context Maintainer, which manages agent-facing operational 
 
 ```text
 idea / issue / request
--> Product Owner clarifies with human
--> human approves requirement direction
--> Context Maintainer updates context when durable context changes
--> Product Owner calls Spec Writer
+-> Product Owner asks project setup and product clarification questions
+-> Product Owner identifies definition gaps
+-> human provides or approves missing definitions
+-> Context Maintainer records approved context when durable context changes
+-> Product Owner calls Spec Writer after requirement approval
 -> Spec Writer writes SDD specification
--> Tech Lead plans waves and tasks
--> Tech Lead calls Context Maintainer when planning reveals durable context
--> Tech Lead calls Agent Recruiter when stack-specific implementation agents are needed
+-> Tech Lead verifies spec, stack, agents and skills before planning
+-> Tech Lead plans waves and tasks with coherent dependencies
+-> Tech Lead syncs milestones/tasks through project-management specialist when integration exists
+-> Tech Lead calls Agent Recruiter when stack-specific agents are needed
 -> Agent Recruiter calls Skill Builder when recruited agents need reusable skills
 -> Skill Builder researches, recommends or drafts skills
 -> Agent Recruiter finalizes recruited agents and skill assignments
--> Orchestrator coordinates task execution
+-> Tech Lead calls Orchestrator with task execution details
+-> Orchestrator identifies capable agents and coordinates task execution
+-> Orchestrator enforces document consistency and quality gates
 -> Quality gate agents validate review, tests, acceptance and security
 -> failed gates trigger correction cycles or replanning
 -> human reviews meaningful outputs and risk decisions
@@ -128,67 +150,19 @@ idea / issue / request
 -> wave or release is considered ready
 ```
 
-## Requirement lifecycle
+## Ad hoc orchestration
 
-1. Human brings an idea, issue or request.
-2. Product Owner clarifies product value, users, scope and acceptance direction.
-3. Human approves the requirement direction.
-4. Context Maintainer records durable product or business context when needed.
-5. Spec Writer writes the formal specification.
-6. Product Owner and human review the spec when product intent is sensitive or ambiguous.
-7. Tech Lead plans waves and tasks from the approved spec.
+The Orchestrator may receive explicit human-approved ad hoc tasks.
 
-## Agent recruitment lifecycle
+Ad hoc tasks must not bypass product or technical governance. If the task changes product scope, architecture, security, data model, release behavior or durable context, the Orchestrator must route it to Product Owner or Tech Lead before execution.
 
-1. Tech Lead identifies implementation domains required by the task plan.
-2. Tech Lead calls Agent Recruiter when stack-specific implementation agents are needed.
-3. Agent Recruiter reads project stack, architecture context and task plan.
-4. Agent Recruiter selects the right blueprint from `agent-blueprints/`.
-5. Agent Recruiter calls Skill Builder for required skills.
-6. Skill Builder researches, recommends or drafts skills.
-7. Agent Recruiter creates or configures recruited agents and assigns skills.
-8. Orchestrator uses active and recruited agents during execution.
+Small operational tasks may proceed when scope, risk, expected result and validation are clear.
 
-## Task lifecycle
+## Project/task-management integration
 
-1. Tech Lead defines executable tasks from a spec.
-2. Each task receives size, category, expected validation, risks, dependencies and gates.
-3. Orchestrator checks that the task is executable.
-4. Orchestrator selects active or recruited agents.
-5. Agents execute or review within their scope.
-6. Quality gates are evaluated.
-7. Failed gates trigger correction cycles.
-8. Repeated failures or unclear scope return to Tech Lead for replanning.
-9. Passed tasks move to human review when meaningful.
-10. Context and documentation are updated when relevant.
+When a project-management system is configured, the Tech Lead must keep milestones, waves, tasks and dependencies consistent with the approved plan.
 
-## Task size
-
-Use this scale:
-
-- `XS`: very small, local, low risk.
-- `S`: small change in one area.
-- `M`: moderate change affecting more than one file or concern.
-- `L`: large change requiring careful decomposition.
-- `XL`: too large for direct execution; split into waves or smaller tasks.
-
-Do not send `XL` tasks directly to implementation.
-
-## Task categories
-
-Allowed categories:
-
-- `standard`: normal full workflow.
-- `XS-doc-only`: documentation-only change.
-- `XS-safe-change`: local, very small, low-risk change.
-
-Lightweight categories reduce checklist weight but do not remove quality gates.
-
-Use `XS-doc-only` only when the task changes documentation, comments or Markdown text and does not alter executable code, configuration, permissions, security-sensitive behavior or public contracts.
-
-Use `XS-safe-change` only when the task is local, low-risk and does not change public APIs, schema, migrations, auth, permissions, security, CI, business flow or shared contracts.
-
-When risk is unclear, use `standard`.
+The Tech Lead should call a recruited project-management specialist to update or validate work items, statuses, dependencies, milestones, owners and links to specs, branches and pull requests.
 
 ## Quality gates
 
@@ -208,128 +182,16 @@ Allowed states:
 
 A task cannot be finalized while any gate is missing or failed.
 
-## Minimum review checklist
+## Mandatory rules
 
-- Scope was respected.
-- Diff or change set is small and reviewable.
-- Names, contracts and structure are clear.
-- There are no opportunistic changes outside the task.
-- Validation evidence is visible.
-
-## Minimum testing checklist
-
-- Automated tests were added or updated when viable.
-- Relevant commands were executed or the limitation was documented.
-- Regressions are covered when applicable.
-- New behavior is covered at the right level.
-
-## Minimum acceptance checklist
-
-- Acceptance criteria were validated.
-- Happy path was checked.
-- Relevant error or edge scenarios were considered.
-- Release risk was classified.
-- Automation gaps were recorded.
-
-## Minimum security checklist
-
-- Security impact was evaluated.
-- Sensitive data, credentials and logs were reviewed when applicable.
-- Authorization remains deny-by-default when applicable.
-- Residual risk was recorded.
-- Cybersecurity review passed or was marked not applicable with justification.
-
-## Correction loop limit
-
-Default correction limit:
-
-- initial execution
-- correction 1
-- correction 2
-
-If any gate still fails after correction 2, stop and return the task to the Tech Lead as `blocked-needs-replanning`.
-
-The Tech Lead should then review:
-
-- ambiguous spec
-- conflicting criteria
-- oversized task
-- technically unreachable condition
-- missing Product Owner decision
-- need to split the task
-
-## Parallel execution
-
-The Orchestrator may coordinate parallel tasks only after checking:
-
-- no shared critical files
-- no dependency between tasks
-- no concurrent migrations or schema changes
-- no simultaneous edits to central context, documentation or configuration
-- no public API conflict
-- independent branches can be integrated safely
-
-When in doubt, do not parallelize.
-
-## Security routing
-
-Call the Cybersecurity Specialist at the beginning and end of tasks that may affect:
-
-- authentication
-- authorization
-- permissions
-- sensitive data
-- configuration values
-- logs and error messages
-- data stores with sensitive data
-- web/API surface area
-- CI/CD or deployment behavior
-
-## Context routing
-
-Call Context Maintainer when work changes durable agent-facing context, such as:
-
-- product goals or scope
-- business rules
-- architecture decisions
-- stack or tool choices
-- constraints
-- glossary terms
-- project current state
-- superseded decisions
-
-Do not use Context Maintainer to approve decisions. Use it to record approved or clearly sourced information.
-
-## Documentation routing
-
-Call Docs Maintainer when work changes human-facing documentation, such as:
-
-- README files
-- user guides
-- contributor guides
-- release notes
-- public workflow documentation
-- setup instructions
-
-At the end of a wave, call Docs Maintainer before considering the wave ready when human-facing documentation changed.
-
-## Response after task execution
-
-After a task, the Orchestrator should report:
-
-- task or issue reference
-- wave reference
-- task category
-- what changed
-- agents used
-- recruited agents used, if any
-- skills used or created, if any
-- main files changed
-- validation executed
-- validation not executed and why
-- quality gate status
-- correction cycles used
-- context updates needed or completed
-- documentation updates needed or completed
-- risks and pending items
-- recommended next step
+- Product Owner, Tech Lead and Orchestrator are available to humans.
+- All other active agents are subagents.
+- Product Owner must ask for missing project definitions and must not infer technical details.
+- Product Owner must notify the human when the project is ready for execution planning.
+- Tech Lead must not plan work outside the approved spec.
+- Tech Lead must not start planning until stack, required agents and required skills are defined or explicitly not needed.
+- Tech Lead must keep task dependencies consistent and coherent.
+- Tech Lead must call Orchestrator to execute planned tasks.
+- Orchestrator must identify capable agents and call them.
+- Orchestrator must enforce document consistency and quality gates.
+- Every task must report `review`, `tests`, `acceptance` and `security` gates.
