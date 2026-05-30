@@ -67,7 +67,16 @@ agent-blueprints/
 skills/
 context/
 docs/templates/
+config/
 ```
+
+## Model routing configuration
+
+Each platform setup copies `config/model-routing.example.yml` into the generated platform folder.
+
+After setup, copy or rename it to the platform-specific configuration file your tooling expects and replace placeholder model names with models available in your subscription.
+
+The toolkit intentionally does not ship fixed model names because availability and cost depend on the user's platform, provider and plan.
 
 ## Generated locations
 
