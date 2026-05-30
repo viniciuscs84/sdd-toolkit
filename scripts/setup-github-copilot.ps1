@@ -19,6 +19,7 @@ Copy-DirClean -Source (Join-Path $repoRoot 'agent-blueprints') -Target (Join-Pat
 Copy-DirClean -Source (Join-Path $repoRoot 'skills') -Target (Join-Path $platformDir 'skills')
 Copy-DirClean -Source (Join-Path $repoRoot 'context') -Target (Join-Path $platformDir 'context')
 Copy-DirClean -Source (Join-Path $repoRoot 'docs/templates') -Target (Join-Path $platformDir 'templates')
+Copy-DirClean -Source (Join-Path $repoRoot 'config') -Target (Join-Path $platformDir 'config')
 
 $instructions = @'
 # GitHub Copilot SDD Toolkit Instructions
@@ -36,6 +37,7 @@ Workflow:
 - Read `.github/sdd-toolkit/context/workflow.md` before coordinating SDD work.
 - Use `.github/sdd-toolkit/templates/` for specs, waves and tasks.
 - Use `.github/sdd-toolkit/agent-blueprints/` only when project-specific agents must be recruited.
+- Adapt `.github/sdd-toolkit/config/model-routing.example.yml` to the models available in this project.
 
 When generating or reviewing code, preserve traceability to specs, waves and tasks whenever applicable.
 '@
