@@ -42,11 +42,13 @@ Available blueprints:
 - `agent-blueprints/api-specialist.md`: template for a project-specific API implementation agent.
 - `agent-blueprints/data-specialist.md`: template for a project-specific data implementation agent.
 - `agent-blueprints/devops-specialist.md`: template for a project-specific DevOps implementation agent.
+- `agent-blueprints/repository-specialist.md`: template for a project-specific repository operations agent for GitHub, Azure Repos, SVN, VSS or another source control system.
 
 ## Context folder
 
 The `context/` folder stores agent-facing operational context:
 
+- `context/workflow.md`
 - `context/product.md`
 - `context/business-rules.md`
 - `context/architecture.md`
