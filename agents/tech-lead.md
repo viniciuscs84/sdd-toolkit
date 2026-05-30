@@ -55,9 +55,9 @@ Lightweight categories reduce checklist weight but do not remove review gates.
 
 Every task should report:
 
-- `code-review`
+- `review`
 - `tests`
-- `qa`
+- `acceptance`
 - `security`
 
 ## Delegation format
