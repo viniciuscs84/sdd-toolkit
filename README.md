@@ -59,7 +59,10 @@ agent-blueprints/
 skills/
 context/
 docs/templates/
+config/
 ```
+
+After setup, review `config/model-routing.example.yml` and adapt it to the models available in your platform or subscription.
 
 ## Recommended adoption flow
 
@@ -67,12 +70,13 @@ docs/templates/
 2. Start with the Product Owner.
 3. Let Product Owner ask the project setup questions.
 4. Fill or approve the required context files.
-5. Let Product Owner call Spec Writer after a requirement is approved.
-6. Let Tech Lead plan approved specs into waves and tasks.
-7. Let Agent Recruiter create project-specific agents when the stack requires it.
-8. Let Skill Builder create or recommend skills for those agents.
-9. Let Orchestrator coordinate execution.
-10. Review quality gates before accepting the work.
+5. Configure model routing if your platform supports per-agent model selection.
+6. Let Product Owner call Spec Writer after a requirement is approved.
+7. Let Tech Lead plan approved specs into waves and tasks.
+8. Let Agent Recruiter create project-specific agents when the stack requires it.
+9. Let Skill Builder create or recommend skills for those agents.
+10. Let Orchestrator coordinate execution.
+11. Review quality gates before accepting the work.
 
 ## Why this exists
 
@@ -87,6 +91,7 @@ This toolkit helps prevent common problems:
 - skipping tests, review, acceptance or security checks
 - mixing product decisions with implementation details
 - treating AI output as automatically correct
+- using expensive models for simple work without an intentional routing policy
 
 ## Core idea
 
@@ -117,9 +122,41 @@ agent-blueprints/     templates for creating project-specific agents
 skills/               reusable skills for SDD tasks
 context/              workflow and reusable context files
 docs/templates/       templates for specs, waves and tasks
+config/               optional project/platform configuration, including model routing
 scripts/              setup scripts for supported platforms
 SECURITY.md           security and responsible-use guidance
 ```
+
+## Model routing
+
+Agents may use different models depending on task complexity, risk and cost.
+
+The toolkit does not hardcode model names because model availability depends on each user's platform, provider, subscription, cost limits and compliance requirements.
+
+Use this file as a starting point:
+
+```text
+config/model-routing.example.yml
+```
+
+It defines logical model profiles such as:
+
+- `economical`: simple, low-risk and repetitive tasks
+- `fast`: routing and simple classification
+- `standard`: balanced day-to-day work
+- `reasoning`: planning, architecture and complex reasoning
+- `high_assurance`: security, acceptance, final review and high-risk decisions
+
+The file also includes suggested agent-to-profile assignments and escalation rules.
+
+Copy or adapt it inside the target project and replace placeholder model names with models available in the client's subscription.
+
+Agents should ask the human instead of guessing when:
+
+- model names are unknown
+- the selected model is unavailable
+- the task is cost-sensitive
+- risk suggests escalation but no high-assurance model is configured
 
 ## Human-facing agents
 
@@ -312,6 +349,7 @@ cp -r agent-blueprints /path/to/your-project/
 cp -r skills /path/to/your-project/
 cp -r context /path/to/your-project/
 cp -r docs/templates /path/to/your-project/docs/
+cp -r config /path/to/your-project/
 ```
 
 Then customize:
@@ -320,8 +358,9 @@ Then customize:
 2. `context/workflow.md`
 3. `context/stack.md`
 4. `context/current-state.md`
-5. `skills/`
-6. recruited agents created from `agent-blueprints/`
+5. `config/model-routing.example.yml`
+6. `skills/`
+7. recruited agents created from `agent-blueprints/`
 
 ## Design principles
 
@@ -330,6 +369,7 @@ Then customize:
 - Do not infer missing technical details.
 - Do not plan work outside the approved specification.
 - Define stack, agents and skills before implementation planning.
+- Route agents to models intentionally according to complexity, risk and cost.
 - Keep waves and tasks traceable to specs.
 - Keep task dependencies consistent and explicit.
 - Use explicit task categories and quality gates.
@@ -343,6 +383,8 @@ Do not publish secrets, tokens, client names, private URLs or proprietary projec
 Do not install third-party skills or generated agents into a production project without human review.
 
 Do not use ad hoc Orchestrator tasks to bypass the Product Owner or Tech Lead.
+
+Do not commit provider tokens or private model credentials in model routing files.
 
 See `SECURITY.md` before sharing a customized version.
 
