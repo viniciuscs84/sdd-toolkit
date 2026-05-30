@@ -29,6 +29,7 @@ Use the SDD Toolkit files under `.claude/`.
 Human-facing agents:
 
 - `.claude/agents/product-owner.md`
+- `.claude/agents/env-configr.md`
 - `.claude/agents/tech-lead.md`
 - `.claude/agents/orchestrator.md`
 
@@ -37,7 +38,9 @@ Workflow:
 - Read `.claude/context/workflow.md` before coordinating SDD work.
 - Use `.claude/templates/` for specs, waves and tasks.
 - Use `.claude/agent-blueprints/` only when project-specific agents must be recruited.
-- Adapt `.claude/config/model-routing.example.yml` to the models available in this project.
+- Adapt `.claude/config/model-routing.example.json` to the models available in this project.
+- Adapt `.claude/config/mcp-config.example.json` when MCPs are needed.
+- Use `.claude/config/readiness-matrix.example.json` to decide which definitions block the current stage.
 '@
 
 Write-TextFile -Target (Join-Path $targetDir 'CLAUDE.md') -Content $instructions
