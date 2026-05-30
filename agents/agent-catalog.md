@@ -43,6 +43,7 @@ Available blueprints:
 - `agent-blueprints/data-specialist.md`: template for a project-specific data implementation agent.
 - `agent-blueprints/devops-specialist.md`: template for a project-specific DevOps implementation agent.
 - `agent-blueprints/repository-specialist.md`: template for a project-specific repository operations agent for GitHub, Azure Repos, SVN, VSS or another source control system.
+- `agent-blueprints/project-management-specialist.md`: template for a project-specific task and project management operations agent for Azure Boards, GitHub Issues, Redmine, Jira or another project management system.
 
 ## Context folder
 
