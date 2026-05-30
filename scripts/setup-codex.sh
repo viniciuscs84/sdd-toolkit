@@ -16,6 +16,7 @@ copy_dir_clean "$REPO_ROOT/agent-blueprints" "$PLATFORM_DIR/agent-blueprints"
 copy_dir_clean "$REPO_ROOT/skills" "$PLATFORM_DIR/skills"
 copy_dir_clean "$REPO_ROOT/context" "$PLATFORM_DIR/context"
 copy_dir_clean "$REPO_ROOT/docs/templates" "$PLATFORM_DIR/templates"
+copy_dir_clean "$REPO_ROOT/config" "$PLATFORM_DIR/config"
 
 write_file "$TARGET_DIR/CODEX.md" "# Codex SDD Toolkit Instructions
 
@@ -32,6 +33,7 @@ Workflow:
 - Read \`.codex/sdd-toolkit/context/workflow.md\` before coordinating SDD work.
 - Use \`.codex/sdd-toolkit/templates/\` for specs, waves and tasks.
 - Use \`.codex/sdd-toolkit/agent-blueprints/\` only when project-specific agents must be recruited.
+- Adapt \`.codex/sdd-toolkit/config/model-routing.example.yml\` to the models available in this project.
 
 Execution rules:
 
