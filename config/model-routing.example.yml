@@ -10,6 +10,18 @@
 
 version: 0.1.0
 
+communication:
+  inter_agent_language: English
+  human_language: adapt-to-human
+  artifact_language: adapt-to-human-or-project-context
+  inter_agent_compression_skill: caveman
+  rules:
+    - Inter-agent communication should use English by default.
+    - Specialized agents communicating with models should use the caveman skill by default.
+    - Human interaction must adapt to the human's language.
+    - Human-facing artifacts must follow the human's language or project context.
+    - Do not use caveman compression with humans unless explicitly requested.
+
 model_profiles:
   economical:
     description: Low-cost model profile for simple, low-risk and repetitive tasks.
@@ -52,6 +64,11 @@ agent_model_preferences:
     fallback_profile: standard
     rationale: Product and project setup decisions affect downstream planning.
 
+  env-configr:
+    default_profile: reasoning
+    fallback_profile: standard
+    rationale: Environment and platform setup affects agent recruitment, skills, model routing and communication rules.
+
   tech-lead:
     default_profile: reasoning
     fallback_profile: high_assurance
@@ -75,7 +92,7 @@ agent_model_preferences:
   agent-recruiter:
     default_profile: reasoning
     fallback_profile: standard
-    rationale: Recruiting agents requires stack and responsibility analysis.
+    rationale: Recruiting agents requires stack, environment and responsibility analysis.
 
   skill-builder:
     default_profile: reasoning
