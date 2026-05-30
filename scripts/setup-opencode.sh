@@ -16,6 +16,7 @@ copy_dir_clean "$REPO_ROOT/agent-blueprints" "$PLATFORM_DIR/agent-blueprints"
 copy_dir_clean "$REPO_ROOT/skills" "$PLATFORM_DIR/skills"
 copy_dir_clean "$REPO_ROOT/context" "$PLATFORM_DIR/context"
 copy_dir_clean "$REPO_ROOT/docs/templates" "$PLATFORM_DIR/templates"
+copy_dir_clean "$REPO_ROOT/config" "$PLATFORM_DIR/config"
 
 write_file "$TARGET_DIR/AGENTS.md" "# OpenCode SDD Toolkit Instructions
 
@@ -32,6 +33,7 @@ Workflow:
 - Read \`.opencode/context/workflow.md\` before coordinating SDD work.
 - Use \`.opencode/templates/\` for specs, waves and tasks.
 - Use \`.opencode/agent-blueprints/\` only when project-specific agents must be recruited.
+- Adapt \`.opencode/config/model-routing.example.yml\` to the models available in this project.
 "
 
 write_file "$TARGET_DIR/opencode.json" "{
