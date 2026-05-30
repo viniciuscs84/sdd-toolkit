@@ -1,38 +1,43 @@
 # SDD Specialist Agents Catalog
 
-This directory defines active agents for Specification-Driven Development.
+This directory defines the agent roles used by the SDD Toolkit.
 
-Use active agents to plan, coordinate, validate and maintain SDD work. Use `agent-blueprints/` when a project needs stack-specific implementation agents.
+The main human-facing agents are `product-owner.md` and `tech-lead.md`. All other agents are subagents called by the Product Owner, Tech Lead, Orchestrator or another specialist when their focused responsibility is needed.
 
-## Core SDD agents
+Use `agent-blueprints/` when a project needs stack-specific implementation, repository or project-management agents.
+
+## Primary agents
 
 - `product-owner.md`: clarifies product goals, user value, scope, priorities and acceptance criteria with the human stakeholder before technical planning starts. It owns product-context decisions.
+- `tech-lead.md`: turns approved specs into waves and executable tasks, estimates size, maps required specialists and sends ready work to the Orchestrator. It does not change code directly.
+
+## Coordination subagents
+
 - `context-maintainer.md`: keeps the `context/` folder accurate, concise and consistent using approved or clearly sourced product, business, architecture, stack, decision, glossary, constraint and current-state information.
 - `spec-writer.md`: writes formal SDD specifications from requirements approved by the Product Owner and the human stakeholder.
-- `tech-lead.md`: turns approved specs into waves and executable tasks, estimates size, maps required specialists and sends ready work to the Orchestrator. It does not change code directly.
 - `agent-recruiter.md`: recruits and configures project-specific implementation agents from `agent-blueprints/`.
 - `skill-builder.md`: creates, adapts or recommends skills required by recruited agents, using official documentation, web research and optionally skills.sh with a user-provided token.
-- `orchestrator.md`: coordinates execution of planned tasks, selects specialists, verifies gates and reports status back to the Tech Lead. It does not implement code directly.
+- `orchestrator.md`: coordinates execution of planned tasks when called by the Tech Lead, selects active or recruited specialists, verifies gates and reports status back to the Tech Lead. It does not implement code directly.
 
-## Quality gate agents
+## Quality gate subagents
 
 - `review-specialist.md`: reviews diffs, scope, maintainability, validation evidence and readiness for human review or merge.
 - `testing-specialist.md`: defines and implements automated testing strategy across unit, integration, regression, smoke and end-to-end tests.
 - `acceptance-specialist.md`: validates acceptance criteria, exploratory scenarios, release risk and product readiness.
 - `cybersecurity-specialist.md`: performs security pre-checks and final security review for tasks with security impact.
 
-## Documentation agents
+## Documentation subagents
 
 - `docs-maintainer.md`: reviews and maintains human-facing documentation, specs, links, workflow notes and guides. It should be called at the end of each wave before closure.
 
-## General technical agents
+## General technical subagents
 
 - `architecture-specialist.md`: reviews system boundaries, module responsibilities, dependencies, public contracts and long-term maintainability.
 - `ux-specialist.md`: reviews user flows, screen behavior, interaction states, copy clarity, accessibility concerns and developer experience.
 
 ## Agent blueprints
 
-Blueprints are not the default active implementation team. They are templates used by `agent-recruiter.md` to create stack-specific implementation agents for a project.
+Blueprints are not the default active implementation team. They are templates used by `agent-recruiter.md` to create project-specific agents.
 
 Available blueprints:
 
@@ -69,17 +74,21 @@ Product Owner owns product-context decisions. Context Maintainer keeps the conte
 4. Spec Writer writes the SDD specification.
 5. Tech Lead turns the spec into waves and executable tasks.
 6. Tech Lead calls Context Maintainer when planning creates or reveals durable technical context.
-7. Tech Lead calls Agent Recruiter when implementation requires stack-specific agents.
+7. Tech Lead calls Agent Recruiter when implementation requires stack-specific, repository or project-management agents.
 8. Agent Recruiter asks Skill Builder which skills recruited agents need.
 9. Skill Builder researches, recommends or drafts required skills.
-10. Agent Recruiter creates or configures implementation agents from blueprints and assigns required skills.
-11. Orchestrator coordinates execution using active agents and recruited agents.
-12. Quality gate agents validate `review`, `tests`, `acceptance` and `security`.
-13. Context Maintainer updates current state when relevant.
-14. Docs Maintainer updates human-facing documentation before wave closure.
+10. Agent Recruiter creates or configures agents from blueprints and assigns required skills.
+11. Tech Lead calls Orchestrator when execution coordination is needed.
+12. Orchestrator coordinates execution using active subagents and recruited agents.
+13. Quality gate subagents validate `review`, `tests`, `acceptance` and `security`.
+14. Context Maintainer updates current state when relevant.
+15. Docs Maintainer updates human-facing documentation before wave closure.
 
 ## Mandatory rules
 
+- Product Owner and Tech Lead are the primary human-facing agents.
+- All other active agents are subagents.
+- Orchestrator is called for execution coordination, not for product clarification or technical planning.
 - Product Owner approves requirements with the human before calling Spec Writer.
 - Product Owner owns product-context decisions.
 - Context Maintainer maintains `context/`; it does not approve product decisions.
