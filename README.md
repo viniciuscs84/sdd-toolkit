@@ -62,7 +62,7 @@ docs/templates/
 config/
 ```
 
-After setup, review the files under `config/` and adapt them to the platform, models, MCPs and project stage.
+After setup, review the JSON files under `config/` and adapt them to the platform, models, MCPs and project stage.
 
 ## Recommended adoption flow
 
@@ -82,7 +82,7 @@ After setup, review the files under `config/` and adapt them to the platform, mo
 
 ## Why this exists
 
-AI coding tools are powerful, but they become risky when they are used without clear scope, context and validation.
+AI coding tools are powerful, but they become risky when used without clear scope, context and validation.
 
 This toolkit helps prevent common problems:
 
@@ -102,8 +102,6 @@ This toolkit helps prevent common problems:
 The human remains the final authority.
 
 Agents help ask questions, configure the environment, document context, write specs, plan execution, recruit stack-specific agents, build skills, coordinate tasks and validate quality.
-
-The main workflow is:
 
 ```text
 idea / issue / request
@@ -127,28 +125,26 @@ agent-blueprints/     templates for creating project-specific agents
 skills/               reusable skills for SDD tasks
 context/              workflow and reusable context files
 docs/templates/       templates for specs, waves and tasks
-config/               optional project/platform configuration, including model routing, MCP and readiness rules
+config/               JSON configuration examples for model routing, MCP and readiness rules
 scripts/              setup scripts for supported platforms
 SECURITY.md           security and responsible-use guidance
 ```
 
 ## Configuration
 
-Configuration examples live under `config/`.
+Configuration examples live under `config/` and use JSON for better automation and cross-platform compatibility.
 
 ```text
-config/model-routing.example.yml
-config/mcp-config.example.yml
-config/readiness-matrix.example.yml
+config/model-routing.example.json
+config/mcp-config.example.json
+config/readiness-matrix.example.json
 ```
 
 ### Model routing
 
-Agents may use different models depending on task complexity, risk and cost.
+`config/model-routing.example.json` defines logical model profiles and suggested routing by agent. The toolkit does not hardcode model names because availability depends on each user's platform, provider, subscription, cost limits and compliance requirements.
 
-The toolkit does not hardcode model names because model availability depends on each user's platform, provider, subscription, cost limits and compliance requirements.
-
-`config/model-routing.example.yml` defines logical profiles such as:
+Logical profiles include:
 
 - `economical`: simple, low-risk and repetitive tasks
 - `fast`: routing and simple classification
@@ -160,7 +156,7 @@ Agents should ask the human instead of guessing when model names are unknown, un
 
 ### MCP configuration
 
-`config/mcp-config.example.yml` defines how MCP servers should be configured and when they are required.
+`config/mcp-config.example.json` defines MCP server policy, readiness and safety rules.
 
 MCPs are not automatically mandatory at project start. They become mandatory only when a stage or task needs them.
 
@@ -171,11 +167,11 @@ Examples:
 - database MCP: required only when a task needs live database inspection or real database validation
 - deployment MCP: required only when deployment, release or environment inspection is requested
 
-Never store MCP secrets, tokens, database URLs or deployment credentials in repository files. Use the secure secret mechanism provided by the selected platform.
+Never store MCP secrets, tokens, database URLs or deployment credentials in repository files.
 
 ### Readiness matrix
 
-`config/readiness-matrix.example.yml` defines when missing definitions block work.
+`config/readiness-matrix.example.json` defines when missing definitions block work.
 
 Definitions are classified as:
 
@@ -203,63 +199,32 @@ When a missing definition blocks progress, the active agent must tell the human 
 
 ## Human-facing agents
 
-Four agents are designed to interact directly with humans.
+Four agents are designed to interact directly with humans:
 
-### Product Owner
-
-`agents/product-owner.md`
-
-Responsible for project setup, product clarification and requirement approval flow.
-
-The Product Owner asks setup questions, identifies missing definitions, calls Env Configr when environment/platform configuration is needed, calls subagents to record approved setup work and never infers missing technical details.
-
-### Env Configr
-
-`agents/env-configr.md`
-
-Responsible for development environment and AI-agent environment configuration.
-
-Env Configr configures AI platform, MCPs, readiness rules, model routing and communication rules. It passes environment/platform instructions to Agent Recruiter and Skill Builder, and it never guesses model names, subscription features, MCP capabilities, platform capabilities or credentials.
-
-### Tech Lead
-
-`agents/tech-lead.md`
-
-Responsible for technical planning.
-
-The Tech Lead plans approved specs into waves and tasks, validates dependencies, stays inside the approved spec, starts planning only after stack/agents/skills are defined and calls the Orchestrator to execute planned tasks.
-
-### Orchestrator
-
-`agents/orchestrator.md`
-
-Responsible for execution coordination.
-
-The Orchestrator receives planned tasks from the Tech Lead, may receive explicit human-approved ad hoc tasks, identifies capable agents, coordinates execution, enforces document consistency and enforces quality gates.
+- `agents/product-owner.md`: project setup, product clarification and requirement approval flow.
+- `agents/env-configr.md`: development environment, AI platform, MCP, readiness, model routing and communication setup.
+- `agents/tech-lead.md`: technical planning, wave/task planning and dependency validation.
+- `agents/orchestrator.md`: execution coordination for planned tasks and explicit human-approved ad hoc tasks.
 
 ## Subagents
 
-Subagents are focused roles called by the human-facing agents or by other specialists.
+Subagents are focused roles called by the human-facing agents or by other specialists:
 
-Current subagents include:
-
-- `context-maintainer.md`: maintains agent-facing project context
-- `spec-writer.md`: writes formal SDD specifications
-- `agent-recruiter.md`: creates/configures project-specific agents from blueprints
-- `skill-builder.md`: creates, adapts or recommends skills
-- `architecture-specialist.md`: reviews boundaries, dependencies and maintainability
-- `ux-specialist.md`: reviews user flows and interface behavior
-- `review-specialist.md`: performs technical review
-- `testing-specialist.md`: defines and validates testing strategy
-- `acceptance-specialist.md`: validates acceptance criteria and product readiness
-- `cybersecurity-specialist.md`: reviews security impact and residual risk
-- `docs-maintainer.md`: maintains human-facing documentation
+- `context-maintainer.md`
+- `spec-writer.md`
+- `agent-recruiter.md`
+- `skill-builder.md`
+- `architecture-specialist.md`
+- `ux-specialist.md`
+- `review-specialist.md`
+- `testing-specialist.md`
+- `acceptance-specialist.md`
+- `cybersecurity-specialist.md`
+- `docs-maintainer.md`
 
 ## Agent blueprints
 
-Blueprints are not active agents by default. They are templates used by Agent Recruiter to create project-specific agents for a stack or tool.
-
-Available blueprints:
+Blueprints are templates used by Agent Recruiter to create project-specific agents:
 
 - `stack-specialist.md`
 - `frontend-specialist.md`
@@ -272,17 +237,11 @@ Available blueprints:
 
 ## Skills
 
-Skills are reusable instructions or procedures that agents can use for recurring work.
+Skills are reusable instructions or procedures that agents can use for recurring work. The Skill Builder creates, adapts or recommends skills required by recruited agents.
 
-The Skill Builder is responsible for creating, adapting or recommending skills required by recruited agents.
-
-It may use official documentation, public web research, existing local skills and optionally the skills.sh API when the user provides their own token.
-
-The `caveman` skill is used by default for inter-agent and specialized model communication when token-efficient communication is useful.
+The `caveman` skill is used by default for compact inter-agent and specialized model communication when token-efficient communication is useful.
 
 ## Context folder
-
-The `context/` folder stores agent-facing operational context.
 
 ```text
 context/workflow.md           human x agents workflow
@@ -295,8 +254,6 @@ context/glossary.md           domain terms
 context/constraints.md        product, technical, legal, operational and security constraints
 context/current-state.md      current known project state
 ```
-
-Product Owner owns product-context decisions. Context Maintainer keeps the context folder accurate, concise and consistent.
 
 ## Templates
 
@@ -345,9 +302,9 @@ Then customize:
 2. `context/workflow.md`
 3. `context/stack.md`
 4. `context/current-state.md`
-5. `config/model-routing.example.yml`
-6. `config/mcp-config.example.yml`
-7. `config/readiness-matrix.example.yml`
+5. `config/model-routing.example.json`
+6. `config/mcp-config.example.json`
+7. `config/readiness-matrix.example.json`
 8. `skills/`
 9. recruited agents created from `agent-blueprints/`
 
