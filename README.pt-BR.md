@@ -1,8 +1,8 @@
 # SDD Toolkit
 
-Um toolkit reutilizável de agentes, blueprints, skills, templates, arquivos de contexto e scripts de configuração para **Specification-Driven Development (SDD)** em engenharia de software assistida por IA.
+Um toolkit reutilizável de agentes, blueprints, skills, templates, arquivos de contexto, configuração e scripts para **Specification-Driven Development (SDD)** em engenharia de software assistida por IA.
 
-O objetivo deste projeto é ajudar humanos e agentes de IA a trabalharem juntos sem pular diretamente de uma ideia para o código. O toolkit define um fluxo estruturado em que requisitos são esclarecidos, specs são escritas, waves e tasks são planejadas, a execução é coordenada e quality gates são verificados.
+O objetivo deste projeto é ajudar humanos e agentes de IA a trabalharem juntos sem pular diretamente de uma ideia para o código. O toolkit define um fluxo estruturado em que requisitos são esclarecidos, ambientes são configurados, specs são escritas, waves e tasks são planejadas, a execução é coordenada e quality gates são verificados.
 
 English version: [`README.md`](README.md)
 
@@ -59,20 +59,25 @@ agent-blueprints/
 skills/
 context/
 docs/templates/
+config/
 ```
+
+Após a configuração, revise `config/model-routing.example.yml` e adapte aos modelos disponíveis na sua plataforma ou assinatura.
 
 ## Fluxo recomendado de adoção
 
 1. Execute o script de configuração da sua plataforma.
 2. Comece pelo Product Owner.
 3. Deixe o Product Owner fazer as perguntas de configuração do projeto.
-4. Preencha ou aprove os arquivos de contexto necessários.
-5. Deixe o Product Owner chamar o Spec Writer depois que um requisito for aprovado.
-6. Deixe o Tech Lead planejar as specs aprovadas em waves e tasks.
-7. Deixe o Agent Recruiter criar agentes específicos do projeto quando a stack exigir.
-8. Deixe o Skill Builder criar ou recomendar skills para esses agentes.
-9. Deixe o Orchestrator coordenar a execução.
-10. Revise os quality gates antes de aceitar o trabalho.
+4. Deixe o Product Owner chamar o Env Configr para ambiente, plataforma de IA, roteamento de modelos e regras de comunicação.
+5. Preencha ou aprove os arquivos de contexto necessários.
+6. Configure o roteamento de modelos se sua plataforma suportar seleção de modelo por agente.
+7. Deixe o Product Owner chamar o Spec Writer depois que um requisito for aprovado.
+8. Deixe o Tech Lead planejar as specs aprovadas em waves e tasks.
+9. Deixe o Agent Recruiter criar agentes específicos do projeto quando a stack exigir.
+10. Deixe o Skill Builder criar ou recomendar skills para esses agentes.
+11. Deixe o Orchestrator coordenar a execução.
+12. Revise os quality gates antes de aceitar o trabalho.
 
 ## Por que este projeto existe
 
@@ -87,18 +92,21 @@ Este toolkit ajuda a evitar problemas comuns:
 - pular testes, revisão, aceite ou verificações de segurança
 - misturar decisões de produto com detalhes de implementação
 - tratar a saída da IA como automaticamente correta
+- usar modelos caros em tarefas simples sem uma política intencional de roteamento
+- forçar um único idioma ou estilo de comunicação para humanos e agentes
 
 ## Ideia central
 
 O humano continua sendo a autoridade final.
 
-Os agentes ajudam a fazer perguntas, documentar contexto, escrever specs, planejar execução, recrutar agentes específicos da stack, criar skills, coordenar tarefas e validar qualidade.
+Os agentes ajudam a fazer perguntas, configurar o ambiente, documentar contexto, escrever specs, planejar execução, recrutar agentes específicos da stack, criar skills, coordenar tarefas e validar qualidade.
 
 O fluxo principal é:
 
 ```text
 ideia / issue / solicitação
 -> Product Owner esclarece com o humano
+-> Env Configr configura ambiente, plataforma de IA, roteamento de modelos e regras de comunicação
 -> requisito é aprovado
 -> Spec Writer escreve a especificação
 -> Tech Lead planeja waves e tasks
@@ -117,13 +125,54 @@ agent-blueprints/     templates para criar agentes específicos do projeto
 skills/               skills reutilizáveis para tarefas SDD
 context/              workflow e arquivos de contexto reutilizáveis
 docs/templates/       templates para specs, waves e tasks
+config/               configuração opcional do projeto/plataforma, incluindo roteamento de modelos
 scripts/              scripts de configuração para plataformas suportadas
 SECURITY.md           orientações de segurança e uso responsável
 ```
 
+## Roteamento de modelos
+
+Agentes podem usar modelos diferentes conforme complexidade, risco e custo da tarefa.
+
+O toolkit não fixa nomes de modelos porque a disponibilidade depende da plataforma, provedor, assinatura, limites de custo e requisitos de compliance de cada usuário.
+
+Use este arquivo como ponto de partida:
+
+```text
+config/model-routing.example.yml
+```
+
+Ele define perfis lógicos como:
+
+- `economical`: tarefas simples, repetitivas e de baixo risco
+- `fast`: roteamento e classificação simples
+- `standard`: trabalho comum equilibrado
+- `reasoning`: planejamento, arquitetura e raciocínio complexo
+- `high_assurance`: segurança, aceite, revisão final e decisões de alto risco
+
+O arquivo também inclui sugestões de associação agente-perfil, regras de comunicação e regras de escalonamento.
+
+Copie ou adapte no projeto alvo e substitua os placeholders pelos modelos disponíveis na assinatura do cliente.
+
+Os agentes devem perguntar ao humano, em vez de adivinhar, quando:
+
+- os nomes dos modelos forem desconhecidos
+- o modelo escolhido não estiver disponível
+- a tarefa for sensível a custo
+- o risco sugerir escalonamento, mas nenhum modelo high_assurance estiver configurado
+
+## Regras de comunicação
+
+- A comunicação entre agentes usa inglês por padrão.
+- Agentes especializados se comunicando com modelos devem usar a skill `caveman` por padrão para reduzir tokens mantendo precisão técnica.
+- A interação com humanos deve se adaptar ao idioma do humano.
+- Artefatos voltados ao humano devem seguir o idioma esperado pelo humano ou pelo contexto do projeto.
+- Não force inglês em artefatos voltados ao humano, a menos que o projeto exija isso explicitamente.
+- Não use compressão caveman com humanos, a menos que o humano peça explicitamente.
+
 ## Agentes disponíveis para humanos
 
-Três agentes foram desenhados para interagir diretamente com humanos.
+Quatro agentes foram desenhados para interagir diretamente com humanos.
 
 ### Product Owner
 
@@ -136,9 +185,27 @@ O Product Owner:
 - faz ao humano as perguntas necessárias para configurar o projeto
 - identifica definições faltantes
 - esclarece objetivos de produto, usuários, escopo e direção de aceite
+- chama o Env Configr quando a configuração de ambiente ou plataforma de IA for necessária
 - chama subagentes para registrar configurações aprovadas
 - avisa o humano quando o projeto está pronto para planejamento de execução
 - nunca infere detalhes técnicos faltantes
+
+### Env Configr
+
+`agents/env-configr.md`
+
+Responsável pela configuração do ambiente de desenvolvimento e do ambiente de agentes de IA.
+
+O Env Configr:
+
+- configura a plataforma de IA e o ambiente de desenvolvimento com o humano
+- ajuda a escolher o script de setup ou layout de plataforma correto
+- configura roteamento de modelos e regras de comunicação
+- passa instruções de ambiente/plataforma para o Agent Recruiter e o Skill Builder
+- garante que a comunicação entre agentes use inglês por padrão
+- garante que a comunicação agente/modelo especializada use a skill `caveman` por padrão
+- garante que interação humana e artefatos sigam o idioma do humano
+- nunca adivinha nomes de modelos, recursos de assinatura, capacidades da plataforma ou credenciais
 
 ### Tech Lead
 
@@ -205,40 +272,17 @@ Blueprints disponíveis:
 - `repository-specialist.md`
 - `project-management-specialist.md`
 
-Exemplo:
-
-```text
-Stack do projeto:
-- ASP.NET Core
-- React
-- PostgreSQL
-- Docker
-- GitHub
-- Azure Boards
-
-O Agent Recruiter pode criar:
-- dotnet-api-specialist
-- react-frontend-specialist
-- postgres-data-specialist
-- docker-devops-specialist
-- github-repository-specialist
-- azure-boards-project-management-specialist
-```
-
 ## Skills
 
 Skills são instruções ou procedimentos reutilizáveis que agentes podem usar em trabalhos recorrentes.
 
 O Skill Builder é responsável por criar, adaptar ou recomendar skills exigidas por agentes recrutados.
 
-Ele pode usar:
-
-- documentação oficial
-- pesquisa pública na internet
-- skills locais existentes
-- opcionalmente, a API da skills.sh quando o usuário fornecer seu próprio token
+Ele pode usar documentação oficial, pesquisa pública na internet, skills locais existentes e, opcionalmente, a API da skills.sh quando o usuário fornecer seu próprio token.
 
 O Skill Builder não deve armazenar, imprimir, commitar ou expor tokens do usuário.
+
+A skill `caveman` é usada por padrão para comunicação entre agentes e comunicação especializada com modelos quando comunicação compacta for útil.
 
 ## Pasta context
 
@@ -272,18 +316,6 @@ docs/templates/wave-template.md
 docs/templates/task-template.md
 ```
 
-### Spec template
-
-Usado pelo Spec Writer para formalizar requisitos aprovados.
-
-### Wave template
-
-Usado pelo Tech Lead para agrupar trabalho relacionado e definir precondições de planejamento.
-
-### Task template
-
-Usado pelo Tech Lead e pelo Orchestrator para manter a execução rastreável, validada e sujeita a gates.
-
 ## Quality gates
 
 Toda task deve reportar quatro gates:
@@ -312,6 +344,7 @@ cp -r agent-blueprints /caminho/para/seu-projeto/
 cp -r skills /caminho/para/seu-projeto/
 cp -r context /caminho/para/seu-projeto/
 cp -r docs/templates /caminho/para/seu-projeto/docs/
+cp -r config /caminho/para/seu-projeto/
 ```
 
 Depois personalize:
@@ -320,16 +353,22 @@ Depois personalize:
 2. `context/workflow.md`
 3. `context/stack.md`
 4. `context/current-state.md`
-5. `skills/`
-6. agentes recrutados criados a partir de `agent-blueprints/`
+5. `config/model-routing.example.yml`
+6. `skills/`
+7. agentes recrutados criados a partir de `agent-blueprints/`
 
 ## Princípios de design
 
 - Começar por especificações antes do código.
-- Product Owner, Tech Lead e Orchestrator ficam disponíveis para humanos.
+- Product Owner, Env Configr, Tech Lead e Orchestrator ficam disponíveis para humanos.
 - Não inferir detalhes técnicos faltantes.
+- Não adivinhar nomes de modelos, recursos de assinatura ou capacidades da plataforma.
 - Não planejar trabalho fora da especificação aprovada.
-- Definir stack, agentes e skills antes do planejamento de implementação.
+- Definir ambiente, plataforma, stack, agentes e skills antes do planejamento de implementação.
+- Rotear agentes para modelos intencionalmente conforme complexidade, risco e custo.
+- Usar inglês para comunicação entre agentes por padrão.
+- Adaptar interação humana e artefatos voltados ao humano ao idioma do humano.
+- Usar `caveman` para comunicação compacta entre agentes/modelos especializados por padrão.
 - Manter waves e tasks rastreáveis às specs.
 - Manter dependências entre tasks consistentes e explícitas.
 - Usar categorias de task e quality gates explícitos.
@@ -343,6 +382,8 @@ Não publique segredos, tokens, nomes de clientes, URLs privadas ou regras propr
 Não instale skills de terceiros ou agentes gerados em um projeto de produção sem revisão humana.
 
 Não use tasks avulsas do Orchestrator para burlar o Product Owner ou o Tech Lead.
+
+Não faça commit de tokens de provedores ou credenciais privadas de modelos em arquivos de roteamento.
 
 Consulte `SECURITY.md` antes de compartilhar uma versão customizada.
 
