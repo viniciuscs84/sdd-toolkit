@@ -1,6 +1,6 @@
 ---
 description: Creates, adapts or recommends skills required by a project stack, using official documentation, web research and optionally the skills.sh API when the user provides their own token.
-mode: all
+mode: subagent
 ---
 
 # Skill Builder Agent
