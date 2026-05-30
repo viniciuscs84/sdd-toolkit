@@ -1,18 +1,18 @@
 # Configuration
 
-This folder contains optional configuration files for adapting the SDD Toolkit to a project, platform and stage.
+This folder contains optional JSON configuration files for adapting the SDD Toolkit to a project, platform and stage.
 
 ## Files
 
 ```text
-config/model-routing.example.yml
-config/mcp-config.example.yml
-config/readiness-matrix.example.yml
+config/model-routing.example.json
+config/mcp-config.example.json
+config/readiness-matrix.example.json
 ```
 
 ## Model routing
 
-Use `model-routing.example.yml` as a starting point for assigning model profiles to agents.
+Use `model-routing.example.json` as a starting point for assigning model profiles to agents.
 
 The toolkit does not define fixed model names because model availability depends on:
 
@@ -34,7 +34,7 @@ These are logical profiles, not provider-specific model names.
 
 ## MCP configuration
 
-Use `mcp-config.example.yml` as a starting point for Model Context Protocol server configuration.
+Use `mcp-config.example.json` as a starting point for Model Context Protocol server configuration.
 
 MCPs are not automatically mandatory at project start.
 
@@ -53,7 +53,7 @@ Use the secure secret mechanism provided by the selected AI platform or runtime.
 
 ## Readiness matrix
 
-Use `readiness-matrix.example.yml` to decide whether a missing definition blocks the current stage.
+Use `readiness-matrix.example.json` to decide whether a missing definition blocks the current stage.
 
 Definitions can be classified as:
 
