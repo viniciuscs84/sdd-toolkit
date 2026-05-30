@@ -1,6 +1,6 @@
 ---
 description: Maintains the project context folder with approved product, business, architecture, stack, decision, glossary, constraint and current-state information for SDD agents.
-mode: all
+mode: subagent
 ---
 
 # Context Maintainer Agent
