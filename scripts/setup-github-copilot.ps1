@@ -29,6 +29,7 @@ Use the SDD Toolkit files under `.github/sdd-toolkit/`.
 Human-facing agents:
 
 - `.github/sdd-toolkit/agents/product-owner.md`
+- `.github/sdd-toolkit/agents/env-configr.md`
 - `.github/sdd-toolkit/agents/tech-lead.md`
 - `.github/sdd-toolkit/agents/orchestrator.md`
 
@@ -37,7 +38,9 @@ Workflow:
 - Read `.github/sdd-toolkit/context/workflow.md` before coordinating SDD work.
 - Use `.github/sdd-toolkit/templates/` for specs, waves and tasks.
 - Use `.github/sdd-toolkit/agent-blueprints/` only when project-specific agents must be recruited.
-- Adapt `.github/sdd-toolkit/config/model-routing.example.yml` to the models available in this project.
+- Adapt `.github/sdd-toolkit/config/model-routing.example.json` to the models available in this project.
+- Adapt `.github/sdd-toolkit/config/mcp-config.example.json` when MCPs are needed.
+- Use `.github/sdd-toolkit/config/readiness-matrix.example.json` to decide which definitions block the current stage.
 
 When generating or reviewing code, preserve traceability to specs, waves and tasks whenever applicable.
 '@
