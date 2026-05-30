@@ -2,21 +2,53 @@
 
 This directory defines the agent roles used by the SDD Toolkit.
 
-The human-facing agents are `product-owner.md`, `env-configr.md`, `tech-lead.md` and `orchestrator.md`. Other agents are subagents called by the Product Owner, Env Configr, Tech Lead, Orchestrator or another specialist when their focused responsibility is needed.
+The human-facing agents are `product-owner.md`, `env-configr.md`, `tech-lead.md` and `orchestrator.md`. Other agents are subagents called only within their allowed invocation boundaries.
 
 Use `agent-blueprints/` when a project needs stack-specific implementation, repository or project-management agents.
 
 ## Human-facing agents
 
-- `product-owner.md`: configures the project with the human, clarifies product goals, identifies definition gaps, asks required setup questions, owns product-context decisions and calls subagents to record approved setup work. It must not infer technical details.
+- `product-owner.md`: configures the project with the human, clarifies product goals, identifies definition gaps, asks required setup questions, owns product-context decisions and calls allowed subagents to record approved setup work. It must not infer technical details and must not call Tech Lead or Orchestrator.
 - `env-configr.md`: configures the development and AI-agent environment with the human or Product Owner, including AI platform, MCPs, readiness rules, model routing, communication rules, setup scripts and environment-specific instructions for Agent Recruiter and Skill Builder.
-- `tech-lead.md`: plans approved specs into coherent waves and executable tasks with consistent dependencies, required agents, skills and validation. It interacts with humans for technical planning and delegates execution to the Orchestrator.
-- `orchestrator.md`: coordinates execution for planned tasks from the Tech Lead and explicit human-approved ad hoc tasks. It identifies capable agents, calls them, enforces document consistency and ensures quality gates are followed.
+- `tech-lead.md`: can only be invoked by a human. It plans approved saved specs into coherent saved waves and tasks with consistent dependencies, required agents, skills and validation. It delegates planned execution to the Orchestrator.
+- `orchestrator.md`: can only be invoked by Tech Lead or by a human. It coordinates execution for planned tasks from the Tech Lead and explicit human-approved ad hoc tasks. It identifies capable agents, calls them, enforces artifact persistence, document consistency and quality gates.
+
+## Invocation boundaries
+
+- Tech Lead can only be invoked by a human.
+- Orchestrator can only be invoked by Tech Lead or by a human.
+- Product Owner must not call Tech Lead.
+- Product Owner must not call Orchestrator.
+- Env Configr, Spec Writer, Context Maintainer, Docs Maintainer and other subagents must not call Tech Lead or Orchestrator.
+- If an agent detects that technical planning is required, it must tell the human to call Tech Lead.
+- If an agent detects that execution coordination is required, it must tell the human whether the next step is Tech Lead planned execution or human-approved ad hoc Orchestrator invocation.
+
+## Artifact persistence
+
+Every durable artifact must be saved to disk before related work is reported as complete.
+
+Durable artifacts include:
+
+- specs
+- wave plans
+- task files
+- context updates
+- decision records
+- source files
+- test files
+- documentation files
+- review reports
+- validation reports
+- project-management export files
+
+Do not treat chat-only output as completed work when a durable artifact is expected.
+
+Completion reports for artifact-producing work must include saved file paths or clearly state why no file was created.
 
 ## Coordination subagents
 
 - `context-maintainer.md`: keeps the `context/` folder accurate, concise and consistent using approved or clearly sourced product, business, architecture, stack, decision, glossary, constraint and current-state information.
-- `spec-writer.md`: writes formal SDD specifications from requirements approved by the Product Owner and the human stakeholder.
+- `spec-writer.md`: writes formal SDD specifications from requirements approved by the Product Owner and the human stakeholder. It must save every generated spec to disk.
 - `agent-recruiter.md`: recruits and configures project-specific implementation agents from `agent-blueprints/`.
 - `skill-builder.md`: creates, adapts or recommends skills required by recruited agents, using official documentation, web research and optionally skills.sh with a user-provided token.
 
@@ -29,7 +61,7 @@ Use `agent-blueprints/` when a project needs stack-specific implementation, repo
 
 ## Documentation subagents
 
-- `docs-maintainer.md`: reviews and maintains human-facing documentation, specs, links, workflow notes and guides. It should be called at the end of each wave before closure.
+- `docs-maintainer.md`: reviews and maintains human-facing documentation, specs, links, workflow notes and guides. It should be called at the end of each wave before closure and must save documentation updates to disk.
 
 ## General technical subagents
 
@@ -117,35 +149,41 @@ When a missing definition blocks progress, the active agent must tell the human 
 2. Product Owner identifies definition gaps and calls Env Configr for environment, AI platform, MCP, readiness, model routing and communication setup.
 3. Env Configr classifies missing definitions as mandatory now, optional now, later stage or not applicable.
 4. Env Configr calls Agent Recruiter and Skill Builder with platform-specific and environment-specific instructions when needed.
-5. Product Owner calls subagents to record approved setup work.
-6. Product Owner tells the human when the project is ready to start execution planning.
-7. Product Owner debates and approves requirements with the human stakeholder.
-8. Product Owner calls Context Maintainer when product or business context changes.
-9. Product Owner calls Spec Writer.
-10. Spec Writer writes the SDD specification using `docs/templates/spec-template.md`.
-11. Tech Lead verifies the approved spec, stack, required agents and required skills before planning.
-12. Tech Lead plans specs into coherent waves and tasks using `docs/templates/wave-template.md` and `docs/templates/task-template.md`.
-13. Tech Lead validates dependencies and keeps project/task-management systems consistent by calling the recruited specialist when integration exists.
-14. Tech Lead calls Context Maintainer when planning creates or reveals durable technical context.
-15. Tech Lead calls Agent Recruiter when implementation requires stack-specific, repository or project-management agents.
-16. Agent Recruiter asks Skill Builder which skills recruited agents need.
-17. Skill Builder researches, recommends or drafts required skills.
-18. Agent Recruiter creates or configures agents from blueprints and assigns required skills.
-19. Tech Lead calls Orchestrator with task details when planned execution is needed.
-20. Orchestrator identifies capable agents, calls them and coordinates execution.
-21. Orchestrator may also coordinate explicit human-approved ad hoc tasks when scope and risk are clear.
-22. Quality gate subagents validate `review`, `tests`, `acceptance` and `security`.
-23. Orchestrator ensures document consistency updates are handled by Context Maintainer, Docs Maintainer or project-management specialists.
-24. Context Maintainer updates current state when relevant.
-25. Docs Maintainer updates human-facing documentation before wave closure.
+5. Product Owner calls allowed subagents to record approved setup work.
+6. Product Owner debates and approves requirements with the human stakeholder.
+7. Product Owner calls Context Maintainer when product or business context changes.
+8. Product Owner calls Spec Writer.
+9. Spec Writer writes and saves the SDD specification using `docs/templates/spec-template.md`.
+10. Product Owner tells the human that the saved spec is ready for Tech Lead planning.
+11. Human calls Tech Lead.
+12. Tech Lead verifies the approved saved spec, stack, required agents and required skills before planning.
+13. Tech Lead plans and saves waves and tasks using `docs/templates/wave-template.md` and `docs/templates/task-template.md`.
+14. Tech Lead validates dependencies and keeps project/task-management systems consistent by calling the recruited specialist when integration exists.
+15. Tech Lead calls Context Maintainer when planning creates or reveals durable technical context.
+16. Tech Lead calls Agent Recruiter when implementation requires stack-specific, repository or project-management agents.
+17. Agent Recruiter asks Skill Builder which skills recruited agents need.
+18. Skill Builder researches, recommends or drafts required skills.
+19. Agent Recruiter creates or configures agents from blueprints and assigns required skills.
+20. Tech Lead calls Orchestrator with saved task details when planned execution is needed.
+21. Orchestrator identifies capable agents, calls them and coordinates execution.
+22. Orchestrator may also coordinate explicit human-approved ad hoc tasks when called by a human and scope/risk are clear.
+23. Quality gate subagents validate `review`, `tests`, `acceptance` and `security`.
+24. Orchestrator ensures document consistency, artifact persistence and quality gates.
+25. Context Maintainer updates current state when relevant.
+26. Docs Maintainer updates human-facing documentation before wave closure.
 
 ## Mandatory rules
 
 - Product Owner, Env Configr, Tech Lead and Orchestrator are available to humans.
 - All other active agents are subagents.
+- Tech Lead can only be invoked by a human.
+- Orchestrator can only be invoked by Tech Lead or by a human.
+- Product Owner must not call Tech Lead.
+- Product Owner must not call Orchestrator.
+- Env Configr and subagents must not call Tech Lead or Orchestrator.
 - Product Owner must ask for missing project definitions and must not infer technical details.
 - Product Owner must call Env Configr during early project setup when environment, AI platform, MCPs, readiness, model routing or communication rules are undefined.
-- Product Owner must notify the human when the project is ready for execution planning.
+- Product Owner must notify the human when a saved spec is ready for Tech Lead planning.
 - Env Configr must not guess models, subscription features, platform capabilities, MCP server capabilities or credentials.
 - Env Configr must classify missing definitions by readiness level before blocking a stage.
 - Env Configr must pass environment, platform, MCP and readiness instructions to Agent Recruiter and Skill Builder when they are called.
@@ -154,14 +192,17 @@ When a missing definition blocks progress, the active agent must tell the human 
 - Inter-agent communication must default to English.
 - Agents should use the `caveman` skill for inter-agent and specialized model communication by default.
 - Human interaction and human-facing artifacts must adapt to the human's language.
+- Every durable artifact must be saved to disk before completion is reported.
+- Spec Writer must save specs to disk.
+- Tech Lead must not plan from chat-only specs when a durable spec file is expected.
+- Tech Lead must save waves and tasks to disk.
 - Tech Lead must not plan work outside the approved spec.
 - Tech Lead must not start planning until stack, required agents and required skills are defined or explicitly not needed.
 - Tech Lead must keep task dependencies consistent and coherent.
-- Tech Lead must use a project-management specialist when task-management integration exists and milestones/tasks need synchronization.
 - Tech Lead must call Orchestrator to execute planned tasks.
-- Orchestrator may receive human-approved ad hoc tasks, but must route product scope, architecture, security, data model or release-impacting work back to Product Owner or Tech Lead.
-- Orchestrator must identify capable agents and call them; it does not implement code directly.
-- Orchestrator must enforce document consistency and quality gates.
+- Orchestrator must reject invocation from any agent except Tech Lead.
+- Orchestrator must identify capable agents and call them.
+- Orchestrator must enforce document consistency, artifact persistence and quality gates.
 - Product Owner approves requirements with the human before calling Spec Writer.
 - Product Owner owns product-context decisions.
 - Context Maintainer maintains `context/`; it does not approve product decisions.
@@ -178,4 +219,4 @@ When a missing definition blocks progress, the active agent must tell the human 
 
 ## Review principle
 
-Every specialist should leave work easier for a human to review: clear scope, small diff, explicit validation and honest notes about uncertainty or known failures.
+Every specialist should leave work easier for a human to review: clear scope, small diff, explicit validation, saved artifacts and honest notes about uncertainty or known failures.
