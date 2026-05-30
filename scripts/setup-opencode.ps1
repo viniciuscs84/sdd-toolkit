@@ -19,6 +19,7 @@ Copy-DirClean -Source (Join-Path $repoRoot 'agent-blueprints') -Target (Join-Pat
 Copy-DirClean -Source (Join-Path $repoRoot 'skills') -Target (Join-Path $platformDir 'skills')
 Copy-DirClean -Source (Join-Path $repoRoot 'context') -Target (Join-Path $platformDir 'context')
 Copy-DirClean -Source (Join-Path $repoRoot 'docs/templates') -Target (Join-Path $platformDir 'templates')
+Copy-DirClean -Source (Join-Path $repoRoot 'config') -Target (Join-Path $platformDir 'config')
 
 $agents = @'
 # OpenCode SDD Toolkit Instructions
@@ -36,6 +37,7 @@ Workflow:
 - Read `.opencode/context/workflow.md` before coordinating SDD work.
 - Use `.opencode/templates/` for specs, waves and tasks.
 - Use `.opencode/agent-blueprints/` only when project-specific agents must be recruited.
+- Adapt `.opencode/config/model-routing.example.yml` to the models available in this project.
 '@
 
 $config = @'
