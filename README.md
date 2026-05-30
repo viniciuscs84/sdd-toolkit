@@ -2,7 +2,7 @@
 
 A reusable toolkit of agents, blueprints, skills, templates, context files and setup scripts for **Specification-Driven Development (SDD)** in AI-assisted software engineering.
 
-The goal of this project is to help humans and AI agents work together without jumping straight from an idea to code. The toolkit defines a structured workflow where requirements are clarified, specs are written, waves and tasks are planned, execution is coordinated and quality gates are checked.
+The goal of this project is to help humans and AI agents work together without jumping straight from an idea to code. The toolkit defines a structured workflow where requirements are clarified, environments are configured, specs are written, waves and tasks are planned, execution is coordinated and quality gates are checked.
 
 Portuguese version: [`README.pt-BR.md`](README.pt-BR.md)
 
@@ -69,14 +69,15 @@ After setup, review `config/model-routing.example.yml` and adapt it to the model
 1. Run the setup script for your platform.
 2. Start with the Product Owner.
 3. Let Product Owner ask the project setup questions.
-4. Fill or approve the required context files.
-5. Configure model routing if your platform supports per-agent model selection.
-6. Let Product Owner call Spec Writer after a requirement is approved.
-7. Let Tech Lead plan approved specs into waves and tasks.
-8. Let Agent Recruiter create project-specific agents when the stack requires it.
-9. Let Skill Builder create or recommend skills for those agents.
-10. Let Orchestrator coordinate execution.
-11. Review quality gates before accepting the work.
+4. Let Product Owner call Env Configr for environment, AI platform, model routing and communication setup.
+5. Fill or approve the required context files.
+6. Configure model routing if your platform supports per-agent model selection.
+7. Let Product Owner call Spec Writer after a requirement is approved.
+8. Let Tech Lead plan approved specs into waves and tasks.
+9. Let Agent Recruiter create project-specific agents when the stack requires it.
+10. Let Skill Builder create or recommend skills for those agents.
+11. Let Orchestrator coordinate execution.
+12. Review quality gates before accepting the work.
 
 ## Why this exists
 
@@ -92,18 +93,20 @@ This toolkit helps prevent common problems:
 - mixing product decisions with implementation details
 - treating AI output as automatically correct
 - using expensive models for simple work without an intentional routing policy
+- forcing one language or communication style across human and agent interactions
 
 ## Core idea
 
 The human remains the final authority.
 
-Agents help ask questions, document context, write specs, plan execution, recruit stack-specific agents, build skills, coordinate tasks and validate quality.
+Agents help ask questions, configure the environment, document context, write specs, plan execution, recruit stack-specific agents, build skills, coordinate tasks and validate quality.
 
 The main workflow is:
 
 ```text
 idea / issue / request
 -> Product Owner clarifies with the human
+-> Env Configr configures environment, AI platform, model routing and communication rules
 -> requirement is approved
 -> Spec Writer writes the specification
 -> Tech Lead plans waves and tasks
@@ -147,7 +150,7 @@ It defines logical model profiles such as:
 - `reasoning`: planning, architecture and complex reasoning
 - `high_assurance`: security, acceptance, final review and high-risk decisions
 
-The file also includes suggested agent-to-profile assignments and escalation rules.
+The file also includes suggested agent-to-profile assignments, communication rules and escalation rules.
 
 Copy or adapt it inside the target project and replace placeholder model names with models available in the client's subscription.
 
@@ -158,9 +161,18 @@ Agents should ask the human instead of guessing when:
 - the task is cost-sensitive
 - risk suggests escalation but no high-assurance model is configured
 
+## Communication rules
+
+- Inter-agent communication defaults to English.
+- Specialized agents communicating with models should use the `caveman` skill by default to reduce token usage while preserving technical accuracy.
+- Human interaction must adapt to the human's language.
+- Human-facing artifacts must follow the language expected by the human or project context.
+- Do not force English for human-facing artifacts unless the project explicitly requires it.
+- Do not use caveman compression with humans unless the human explicitly asks for it.
+
 ## Human-facing agents
 
-Three agents are designed to interact directly with humans.
+Four agents are designed to interact directly with humans.
 
 ### Product Owner
 
@@ -173,9 +185,27 @@ The Product Owner:
 - asks the human the questions needed to configure the project
 - identifies missing definitions
 - clarifies product goals, users, scope and acceptance direction
+- calls Env Configr when environment or AI platform configuration is needed
 - calls subagents to record approved setup work
 - notifies the human when the project is ready for execution planning
 - never infers missing technical details
+
+### Env Configr
+
+`agents/env-configr.md`
+
+Responsible for development environment and AI-agent environment configuration.
+
+Env Configr:
+
+- configures the AI platform and development environment with the human
+- helps choose the right setup script or platform layout
+- configures model routing and communication rules
+- passes environment/platform instructions to Agent Recruiter and Skill Builder
+- ensures inter-agent communication uses English by default
+- ensures specialized agent/model communication uses the `caveman` skill by default
+- ensures human interaction and artifacts follow the human's language
+- never guesses model names, subscription features, platform capabilities or credentials
 
 ### Tech Lead
 
@@ -277,6 +307,8 @@ It may use:
 
 The Skill Builder must not store, print, commit or expose user tokens.
 
+The `caveman` skill is used by default for inter-agent and specialized model communication when token-efficient communication is useful.
+
 ## Context folder
 
 The `context/` folder stores agent-facing operational context.
@@ -365,11 +397,15 @@ Then customize:
 ## Design principles
 
 - Start from specifications before code.
-- Product Owner, Tech Lead and Orchestrator are available to humans.
+- Product Owner, Env Configr, Tech Lead and Orchestrator are available to humans.
 - Do not infer missing technical details.
+- Do not guess model names, subscription features or platform capabilities.
 - Do not plan work outside the approved specification.
-- Define stack, agents and skills before implementation planning.
+- Define environment, platform, stack, agents and skills before implementation planning.
 - Route agents to models intentionally according to complexity, risk and cost.
+- Use English for inter-agent communication by default.
+- Adapt human interaction and human-facing artifacts to the human's language.
+- Use `caveman` for compact inter-agent/specialized-model communication by default.
 - Keep waves and tasks traceable to specs.
 - Keep task dependencies consistent and explicit.
 - Use explicit task categories and quality gates.
