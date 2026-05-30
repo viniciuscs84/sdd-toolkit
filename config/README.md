@@ -1,6 +1,14 @@
 # Configuration
 
-This folder contains optional configuration files for adapting the SDD Toolkit to a project or platform.
+This folder contains optional configuration files for adapting the SDD Toolkit to a project, platform and stage.
+
+## Files
+
+```text
+config/model-routing.example.yml
+config/mcp-config.example.yml
+config/readiness-matrix.example.yml
+```
 
 ## Model routing
 
@@ -14,18 +22,7 @@ The toolkit does not define fixed model names because model availability depends
 - cost limits
 - compliance and data policies
 
-## Recommended process
-
-1. Copy `config/model-routing.example.yml` into the target project.
-2. Rename it to `config/model-routing.yml` or the platform-specific name required by your tooling.
-3. Replace placeholder model names with models available in your subscription.
-4. Review agent-to-profile assignments.
-5. Adjust routing rules for cost, latency, accuracy and risk.
-6. Do not commit private provider tokens or credentials.
-
-## Profile idea
-
-The example uses these profiles:
+The example uses logical profiles:
 
 - `economical`: simple and low-risk work.
 - `fast`: routing and simple classification.
@@ -35,6 +32,57 @@ The example uses these profiles:
 
 These are logical profiles, not provider-specific model names.
 
+## MCP configuration
+
+Use `mcp-config.example.yml` as a starting point for Model Context Protocol server configuration.
+
+MCPs are not automatically mandatory at project start.
+
+Configure MCPs when they are known or when a task actually needs them, such as:
+
+- repository access through MCP
+- task/project-management access through MCP
+- live database inspection
+- filesystem access
+- browser automation
+- deployment or environment inspection
+
+Do not store secrets, tokens, database URLs or deployment credentials in repository files.
+
+Use the secure secret mechanism provided by the selected AI platform or runtime.
+
+## Readiness matrix
+
+Use `readiness-matrix.example.yml` to decide whether a missing definition blocks the current stage.
+
+Definitions can be classified as:
+
+- `mandatory_now`: required before the current stage can proceed.
+- `optional_now`: useful now, but not required to proceed.
+- `later_stage`: not required now; becomes required only when a later stage or task needs it.
+- `not_applicable`: not required for this project or task.
+
+Examples:
+
+- Deployment environment is not required at project start, but becomes mandatory when deploy is requested.
+- Database credentials are not required at project start, but become mandatory when a task must connect to a real database.
+- MCP servers are optional at project start, but become mandatory when a task requires external access through MCP.
+
+## Recommended process
+
+1. Copy the example files into the target project.
+2. Rename them if the selected platform requires a specific config name.
+3. Replace placeholders with project-specific values.
+4. Keep credentials outside the repository.
+5. Review model routing, MCP availability and readiness rules with the human.
+6. Let Env Configr classify missing definitions before blocking work.
+
 ## Human decision required
 
-When model names are unknown, unavailable or cost-sensitive, agents should ask the human instead of guessing.
+Agents should ask the human instead of guessing when:
+
+- model names are unknown, unavailable or cost-sensitive
+- MCP server capabilities are unknown
+- credentials are required
+- a missing definition may block the current task
+- a later-stage configuration becomes necessary
