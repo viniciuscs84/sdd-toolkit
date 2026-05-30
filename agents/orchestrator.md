@@ -47,7 +47,7 @@ If essential information is missing, return the task to the Tech Lead for clarif
 3. Select the right specialist agents.
 4. Coordinate execution in the correct order.
 5. Call cybersecurity review when security impact may exist.
-6. Ensure code review, tests, QA and security gates are evaluated.
+6. Ensure review, tests, acceptance and security gates are evaluated.
 7. Coordinate correction cycles when gates fail.
 8. Stop and return to planning when the task becomes unclear or too large.
 9. Report results clearly to the Tech Lead.
