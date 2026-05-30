@@ -9,7 +9,8 @@ Use active agents to plan, coordinate, validate and maintain SDD work. Use `agen
 - `product-owner.md`: clarifies product goals, user value, scope, priorities and acceptance criteria with the human stakeholder before technical planning starts.
 - `spec-writer.md`: writes formal SDD specifications from requirements approved by the Product Owner and the human stakeholder.
 - `tech-lead.md`: turns approved specs into waves and executable tasks, estimates size, maps required specialists and sends ready work to the Orchestrator. It does not change code directly.
-- `agent-recruiter.md`: recruits and configures project-specific implementation agents from `agent-blueprints/`, assigning the skills each agent needs for the project stack.
+- `agent-recruiter.md`: recruits and configures project-specific implementation agents from `agent-blueprints/`.
+- `skill-builder.md`: creates, adapts or recommends skills required by recruited agents, using official documentation, web research and optionally skills.sh with a user-provided token.
 - `orchestrator.md`: coordinates execution of planned tasks, selects specialists, verifies gates and reports status back to the Tech Lead. It does not implement code directly.
 
 ## Quality gate agents
@@ -48,10 +49,12 @@ Available blueprints:
 3. Spec Writer writes the SDD specification.
 4. Tech Lead turns the spec into waves and executable tasks.
 5. Tech Lead calls Agent Recruiter when implementation requires stack-specific agents.
-6. Agent Recruiter creates or configures implementation agents from blueprints and assigns required skills.
-7. Orchestrator coordinates execution using active agents and recruited agents.
-8. Quality gate agents validate `review`, `tests`, `acceptance` and `security`.
-9. Docs Maintainer updates documentation before wave closure.
+6. Agent Recruiter asks Skill Builder which skills recruited agents need.
+7. Skill Builder researches, recommends or drafts required skills.
+8. Agent Recruiter creates or configures implementation agents from blueprints and assigns required skills.
+9. Orchestrator coordinates execution using active agents and recruited agents.
+10. Quality gate agents validate `review`, `tests`, `acceptance` and `security`.
+11. Docs Maintainer updates documentation before wave closure.
 
 ## Mandatory rules
 
@@ -59,6 +62,8 @@ Available blueprints:
 - Spec Writer writes specs; it does not approve requirements or plan implementation tasks.
 - Planning agents do not edit code.
 - Agent Recruiter creates or configures agents; it does not implement project features.
+- Skill Builder creates, adapts or recommends skills; it does not implement project features or recruit agents.
+- Skill Builder may use skills.sh only when the user provides their own authentication token for the current task.
 - The Orchestrator does not implement code directly.
 - Every task must report `review`, `tests`, `acceptance` and `security` gates.
 - Lightweight task categories may simplify checklists, but do not remove gates.
