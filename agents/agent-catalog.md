@@ -6,7 +6,8 @@ Use active agents to plan, coordinate, validate and maintain SDD work. Use `agen
 
 ## Core SDD agents
 
-- `product-owner.md`: clarifies product goals, user value, scope, priorities and acceptance criteria with the human stakeholder before technical planning starts.
+- `product-owner.md`: clarifies product goals, user value, scope, priorities and acceptance criteria with the human stakeholder before technical planning starts. It owns product-context decisions.
+- `context-maintainer.md`: keeps the `context/` folder accurate, concise and consistent using approved or clearly sourced product, business, architecture, stack, decision, glossary, constraint and current-state information.
 - `spec-writer.md`: writes formal SDD specifications from requirements approved by the Product Owner and the human stakeholder.
 - `tech-lead.md`: turns approved specs into waves and executable tasks, estimates size, maps required specialists and sends ready work to the Orchestrator. It does not change code directly.
 - `agent-recruiter.md`: recruits and configures project-specific implementation agents from `agent-blueprints/`.
@@ -22,7 +23,7 @@ Use active agents to plan, coordinate, validate and maintain SDD work. Use `agen
 
 ## Documentation agents
 
-- `docs-maintainer.md`: reviews and maintains documentation, specs, links, workflow notes and agent-facing guidance. It should be called at the end of each wave before closure.
+- `docs-maintainer.md`: reviews and maintains human-facing documentation, specs, links, workflow notes and guides. It should be called at the end of each wave before closure.
 
 ## General technical agents
 
@@ -42,23 +43,43 @@ Available blueprints:
 - `agent-blueprints/data-specialist.md`: template for a project-specific data implementation agent.
 - `agent-blueprints/devops-specialist.md`: template for a project-specific DevOps implementation agent.
 
+## Context folder
+
+The `context/` folder stores agent-facing operational context:
+
+- `context/product.md`
+- `context/business-rules.md`
+- `context/architecture.md`
+- `context/stack.md`
+- `context/decisions.md`
+- `context/glossary.md`
+- `context/constraints.md`
+- `context/current-state.md`
+
+Product Owner owns product-context decisions. Context Maintainer keeps the context folder accurate, concise and consistent.
+
 ## Recommended flow
 
 1. Product Owner debates and approves the requirement with the human stakeholder.
-2. Product Owner calls Spec Writer.
-3. Spec Writer writes the SDD specification.
-4. Tech Lead turns the spec into waves and executable tasks.
-5. Tech Lead calls Agent Recruiter when implementation requires stack-specific agents.
-6. Agent Recruiter asks Skill Builder which skills recruited agents need.
-7. Skill Builder researches, recommends or drafts required skills.
-8. Agent Recruiter creates or configures implementation agents from blueprints and assigns required skills.
-9. Orchestrator coordinates execution using active agents and recruited agents.
-10. Quality gate agents validate `review`, `tests`, `acceptance` and `security`.
-11. Docs Maintainer updates documentation before wave closure.
+2. Product Owner calls Context Maintainer when product or business context changes.
+3. Product Owner calls Spec Writer.
+4. Spec Writer writes the SDD specification.
+5. Tech Lead turns the spec into waves and executable tasks.
+6. Tech Lead calls Context Maintainer when planning creates or reveals durable technical context.
+7. Tech Lead calls Agent Recruiter when implementation requires stack-specific agents.
+8. Agent Recruiter asks Skill Builder which skills recruited agents need.
+9. Skill Builder researches, recommends or drafts required skills.
+10. Agent Recruiter creates or configures implementation agents from blueprints and assigns required skills.
+11. Orchestrator coordinates execution using active agents and recruited agents.
+12. Quality gate agents validate `review`, `tests`, `acceptance` and `security`.
+13. Context Maintainer updates current state when relevant.
+14. Docs Maintainer updates human-facing documentation before wave closure.
 
 ## Mandatory rules
 
 - Product Owner approves requirements with the human before calling Spec Writer.
+- Product Owner owns product-context decisions.
+- Context Maintainer maintains `context/`; it does not approve product decisions.
 - Spec Writer writes specs; it does not approve requirements or plan implementation tasks.
 - Planning agents do not edit code.
 - Agent Recruiter creates or configures agents; it does not implement project features.
