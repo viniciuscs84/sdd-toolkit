@@ -62,22 +62,23 @@ docs/templates/
 config/
 ```
 
-After setup, review `config/model-routing.example.yml` and adapt it to the models available in your platform or subscription.
+After setup, review the files under `config/` and adapt them to the platform, models, MCPs and project stage.
 
 ## Recommended adoption flow
 
 1. Run the setup script for your platform.
 2. Start with the Product Owner.
 3. Let Product Owner ask the project setup questions.
-4. Let Product Owner call Env Configr for environment, AI platform, model routing and communication setup.
+4. Let Product Owner call Env Configr for environment, AI platform, MCP, readiness, model routing and communication setup.
 5. Fill or approve the required context files.
 6. Configure model routing if your platform supports per-agent model selection.
-7. Let Product Owner call Spec Writer after a requirement is approved.
-8. Let Tech Lead plan approved specs into waves and tasks.
-9. Let Agent Recruiter create project-specific agents when the stack requires it.
-10. Let Skill Builder create or recommend skills for those agents.
-11. Let Orchestrator coordinate execution.
-12. Review quality gates before accepting the work.
+7. Configure MCPs only when they are known or required by a current task.
+8. Let Product Owner call Spec Writer after a requirement is approved.
+9. Let Tech Lead plan approved specs into waves and tasks.
+10. Let Agent Recruiter create project-specific agents when the stack requires it.
+11. Let Skill Builder create or recommend skills for those agents.
+12. Let Orchestrator coordinate execution.
+13. Review quality gates before accepting the work.
 
 ## Why this exists
 
@@ -94,6 +95,7 @@ This toolkit helps prevent common problems:
 - treating AI output as automatically correct
 - using expensive models for simple work without an intentional routing policy
 - forcing one language or communication style across human and agent interactions
+- blocking early project setup with deployment, database or MCP details that are not needed yet
 
 ## Core idea
 
@@ -106,7 +108,7 @@ The main workflow is:
 ```text
 idea / issue / request
 -> Product Owner clarifies with the human
--> Env Configr configures environment, AI platform, model routing and communication rules
+-> Env Configr configures environment, AI platform, MCPs, readiness, model routing and communication rules
 -> requirement is approved
 -> Spec Writer writes the specification
 -> Tech Lead plans waves and tasks
@@ -125,24 +127,28 @@ agent-blueprints/     templates for creating project-specific agents
 skills/               reusable skills for SDD tasks
 context/              workflow and reusable context files
 docs/templates/       templates for specs, waves and tasks
-config/               optional project/platform configuration, including model routing
+config/               optional project/platform configuration, including model routing, MCP and readiness rules
 scripts/              setup scripts for supported platforms
 SECURITY.md           security and responsible-use guidance
 ```
 
-## Model routing
+## Configuration
+
+Configuration examples live under `config/`.
+
+```text
+config/model-routing.example.yml
+config/mcp-config.example.yml
+config/readiness-matrix.example.yml
+```
+
+### Model routing
 
 Agents may use different models depending on task complexity, risk and cost.
 
 The toolkit does not hardcode model names because model availability depends on each user's platform, provider, subscription, cost limits and compliance requirements.
 
-Use this file as a starting point:
-
-```text
-config/model-routing.example.yml
-```
-
-It defines logical model profiles such as:
+`config/model-routing.example.yml` defines logical profiles such as:
 
 - `economical`: simple, low-risk and repetitive tasks
 - `fast`: routing and simple classification
@@ -150,16 +156,41 @@ It defines logical model profiles such as:
 - `reasoning`: planning, architecture and complex reasoning
 - `high_assurance`: security, acceptance, final review and high-risk decisions
 
-The file also includes suggested agent-to-profile assignments, communication rules and escalation rules.
+Agents should ask the human instead of guessing when model names are unknown, unavailable, cost-sensitive or insufficient for risk.
 
-Copy or adapt it inside the target project and replace placeholder model names with models available in the client's subscription.
+### MCP configuration
 
-Agents should ask the human instead of guessing when:
+`config/mcp-config.example.yml` defines how MCP servers should be configured and when they are required.
 
-- model names are unknown
-- the selected model is unavailable
-- the task is cost-sensitive
-- risk suggests escalation but no high-assurance model is configured
+MCPs are not automatically mandatory at project start. They become mandatory only when a stage or task needs them.
+
+Examples:
+
+- repository MCP: required only when repository operations depend on MCP access
+- project-management MCP: required only when issues, work items, boards or milestones must be synchronized through MCP
+- database MCP: required only when a task needs live database inspection or real database validation
+- deployment MCP: required only when deployment, release or environment inspection is requested
+
+Never store MCP secrets, tokens, database URLs or deployment credentials in repository files. Use the secure secret mechanism provided by the selected platform.
+
+### Readiness matrix
+
+`config/readiness-matrix.example.yml` defines when missing definitions block work.
+
+Definitions are classified as:
+
+- `mandatory_now`: required before the current stage can proceed
+- `optional_now`: useful now, but not required to proceed
+- `later_stage`: not required now; required only when a later stage or task needs it
+- `not_applicable`: not required for this project or task
+
+Examples:
+
+- Deployment environment is not required during early project setup, but becomes mandatory when deploy is requested.
+- Database credentials are not required during early project setup, but become mandatory when a task must connect to a real database.
+- MCP servers are optional during early project setup, but become mandatory when a task requires external access through MCP.
+
+When a missing definition blocks progress, the active agent must tell the human which definition is missing, why it is required now, which stage or task it blocks and which agent should resolve it.
 
 ## Communication rules
 
@@ -180,15 +211,7 @@ Four agents are designed to interact directly with humans.
 
 Responsible for project setup, product clarification and requirement approval flow.
 
-The Product Owner:
-
-- asks the human the questions needed to configure the project
-- identifies missing definitions
-- clarifies product goals, users, scope and acceptance direction
-- calls Env Configr when environment or AI platform configuration is needed
-- calls subagents to record approved setup work
-- notifies the human when the project is ready for execution planning
-- never infers missing technical details
+The Product Owner asks setup questions, identifies missing definitions, calls Env Configr when environment/platform configuration is needed, calls subagents to record approved setup work and never infers missing technical details.
 
 ### Env Configr
 
@@ -196,16 +219,7 @@ The Product Owner:
 
 Responsible for development environment and AI-agent environment configuration.
 
-Env Configr:
-
-- configures the AI platform and development environment with the human
-- helps choose the right setup script or platform layout
-- configures model routing and communication rules
-- passes environment/platform instructions to Agent Recruiter and Skill Builder
-- ensures inter-agent communication uses English by default
-- ensures specialized agent/model communication uses the `caveman` skill by default
-- ensures human interaction and artifacts follow the human's language
-- never guesses model names, subscription features, platform capabilities or credentials
+Env Configr configures AI platform, MCPs, readiness rules, model routing and communication rules. It passes environment/platform instructions to Agent Recruiter and Skill Builder, and it never guesses model names, subscription features, MCP capabilities, platform capabilities or credentials.
 
 ### Tech Lead
 
@@ -213,14 +227,7 @@ Env Configr:
 
 Responsible for technical planning.
 
-The Tech Lead:
-
-- plans approved specs into waves and tasks
-- validates task dependencies
-- ensures planning stays inside the approved spec
-- starts planning only after stack, agents and skills are defined
-- keeps task-management systems consistent when integration exists
-- calls the Orchestrator to execute planned tasks
+The Tech Lead plans approved specs into waves and tasks, validates dependencies, stays inside the approved spec, starts planning only after stack/agents/skills are defined and calls the Orchestrator to execute planned tasks.
 
 ### Orchestrator
 
@@ -228,16 +235,7 @@ The Tech Lead:
 
 Responsible for execution coordination.
 
-The Orchestrator:
-
-- receives planned tasks from the Tech Lead
-- may receive explicit human-approved ad hoc tasks
-- identifies capable agents
-- calls active or recruited agents
-- coordinates execution order
-- enforces document consistency
-- enforces quality gates
-- does not implement code directly
+The Orchestrator receives planned tasks from the Tech Lead, may receive explicit human-approved ad hoc tasks, identifies capable agents, coordinates execution, enforces document consistency and enforces quality gates.
 
 ## Subagents
 
@@ -272,40 +270,13 @@ Available blueprints:
 - `repository-specialist.md`
 - `project-management-specialist.md`
 
-Example:
-
-```text
-Project stack:
-- ASP.NET Core
-- React
-- PostgreSQL
-- Docker
-- GitHub
-- Azure Boards
-
-Agent Recruiter may create:
-- dotnet-api-specialist
-- react-frontend-specialist
-- postgres-data-specialist
-- docker-devops-specialist
-- github-repository-specialist
-- azure-boards-project-management-specialist
-```
-
 ## Skills
 
 Skills are reusable instructions or procedures that agents can use for recurring work.
 
 The Skill Builder is responsible for creating, adapting or recommending skills required by recruited agents.
 
-It may use:
-
-- official documentation
-- public web research
-- existing local skills
-- optionally, the skills.sh API when the user provides their own token
-
-The Skill Builder must not store, print, commit or expose user tokens.
+It may use official documentation, public web research, existing local skills and optionally the skills.sh API when the user provides their own token.
 
 The `caveman` skill is used by default for inter-agent and specialized model communication when token-efficient communication is useful.
 
@@ -325,33 +296,17 @@ context/constraints.md        product, technical, legal, operational and securit
 context/current-state.md      current known project state
 ```
 
-Product Owner owns product-context decisions.
-
-Context Maintainer keeps the context folder accurate, concise and consistent.
+Product Owner owns product-context decisions. Context Maintainer keeps the context folder accurate, concise and consistent.
 
 ## Templates
 
 Templates live under `docs/templates/`.
-
-They are used to preserve traceability:
 
 ```text
 docs/templates/spec-template.md
 docs/templates/wave-template.md
 docs/templates/task-template.md
 ```
-
-### Spec template
-
-Used by Spec Writer to formalize approved requirements.
-
-### Wave template
-
-Used by Tech Lead to group related implementation work and define planning preconditions.
-
-### Task template
-
-Used by Tech Lead and Orchestrator to keep execution traceable, validated and gated.
 
 ## Quality gates
 
@@ -391,15 +346,18 @@ Then customize:
 3. `context/stack.md`
 4. `context/current-state.md`
 5. `config/model-routing.example.yml`
-6. `skills/`
-7. recruited agents created from `agent-blueprints/`
+6. `config/mcp-config.example.yml`
+7. `config/readiness-matrix.example.yml`
+8. `skills/`
+9. recruited agents created from `agent-blueprints/`
 
 ## Design principles
 
 - Start from specifications before code.
 - Product Owner, Env Configr, Tech Lead and Orchestrator are available to humans.
 - Do not infer missing technical details.
-- Do not guess model names, subscription features or platform capabilities.
+- Do not guess model names, subscription features, MCP capabilities or platform capabilities.
+- Do not require deployment, database or MCP configuration before a stage actually needs it.
 - Do not plan work outside the approved specification.
 - Define environment, platform, stack, agents and skills before implementation planning.
 - Route agents to models intentionally according to complexity, risk and cost.
@@ -420,7 +378,7 @@ Do not install third-party skills or generated agents into a production project 
 
 Do not use ad hoc Orchestrator tasks to bypass the Product Owner or Tech Lead.
 
-Do not commit provider tokens or private model credentials in model routing files.
+Do not commit provider tokens, MCP credentials, database URLs, deployment credentials or private model credentials in configuration files.
 
 See `SECURITY.md` before sharing a customized version.
 
