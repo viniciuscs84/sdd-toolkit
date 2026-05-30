@@ -4,6 +4,76 @@ A reusable toolkit of agents, blueprints, skills, templates, context files and s
 
 The goal of this project is to help humans and AI agents work together without jumping straight from an idea to code. The toolkit defines a structured workflow where requirements are clarified, specs are written, waves and tasks are planned, execution is coordinated and quality gates are checked.
 
+Portuguese version: [`README.pt-BR.md`](README.pt-BR.md)
+
+## Quick start
+
+Choose the setup script for the AI/developer platform you want to use.
+
+### Linux, macOS, Git Bash or WSL
+
+```bash
+bash scripts/setup-claude.sh /path/to/your-project
+bash scripts/setup-opencode.sh /path/to/your-project
+bash scripts/setup-github-copilot.sh /path/to/your-project
+bash scripts/setup-codex.sh /path/to/your-project
+```
+
+### Windows PowerShell
+
+```powershell
+.\scripts\setup-claude.ps1 C:\Path\To\YourProject
+.\scripts\setup-opencode.ps1 C:\Path\To\YourProject
+.\scripts\setup-github-copilot.ps1 C:\Path\To\YourProject
+.\scripts\setup-codex.ps1 C:\Path\To\YourProject
+```
+
+If PowerShell blocks script execution, run from a trusted terminal:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
+or run a script with:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\setup-claude.ps1 C:\Path\To\YourProject
+```
+
+If no target path is provided, scripts use the current working directory.
+
+## What each setup script creates
+
+```text
+Claude           -> .claude/ + CLAUDE.md
+OpenCode         -> .opencode/ + AGENTS.md + opencode.json
+GitHub Copilot   -> .github/sdd-toolkit/ + .github/copilot-instructions.md
+Codex            -> .codex/sdd-toolkit/ + CODEX.md
+```
+
+Each script copies:
+
+```text
+agents/
+agent-blueprints/
+skills/
+context/
+docs/templates/
+```
+
+## Recommended adoption flow
+
+1. Run the setup script for your platform.
+2. Start with the Product Owner.
+3. Let Product Owner ask the project setup questions.
+4. Fill or approve the required context files.
+5. Let Product Owner call Spec Writer after a requirement is approved.
+6. Let Tech Lead plan approved specs into waves and tasks.
+7. Let Agent Recruiter create project-specific agents when the stack requires it.
+8. Let Skill Builder create or recommend skills for those agents.
+9. Let Orchestrator coordinate execution.
+10. Review quality gates before accepting the work.
+
 ## Why this exists
 
 AI coding tools are powerful, but they become risky when they are used without clear scope, context and validation.
@@ -232,61 +302,6 @@ Allowed states:
 
 A task should not be considered complete while any gate is missing or failed.
 
-## Platform setup scripts
-
-The toolkit can be installed into different AI/developer platforms.
-
-The user chooses one script according to the platform they want to use.
-
-### Linux, macOS, Git Bash or WSL
-
-```bash
-bash scripts/setup-claude.sh /path/to/your-project
-bash scripts/setup-opencode.sh /path/to/your-project
-bash scripts/setup-github-copilot.sh /path/to/your-project
-bash scripts/setup-codex.sh /path/to/your-project
-```
-
-### Windows PowerShell
-
-```powershell
-.\scripts\setup-claude.ps1 C:\Path\To\YourProject
-.\scripts\setup-opencode.ps1 C:\Path\To\YourProject
-.\scripts\setup-github-copilot.ps1 C:\Path\To\YourProject
-.\scripts\setup-codex.ps1 C:\Path\To\YourProject
-```
-
-If PowerShell blocks script execution, run from a trusted terminal:
-
-```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-```
-
-or run a script with:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\setup-claude.ps1 C:\Path\To\YourProject
-```
-
-## What each setup script creates
-
-```text
-Claude           -> .claude/ + CLAUDE.md
-OpenCode         -> .opencode/ + AGENTS.md + opencode.json
-GitHub Copilot   -> .github/sdd-toolkit/ + .github/copilot-instructions.md
-Codex            -> .codex/sdd-toolkit/ + CODEX.md
-```
-
-Each script copies:
-
-```text
-agents/
-agent-blueprints/
-skills/
-context/
-docs/templates/
-```
-
 ## Manual reuse
 
 You can also copy only the folders you need:
@@ -307,19 +322,6 @@ Then customize:
 4. `context/current-state.md`
 5. `skills/`
 6. recruited agents created from `agent-blueprints/`
-
-## Recommended adoption flow
-
-1. Run the setup script for your platform.
-2. Start with the Product Owner.
-3. Let Product Owner ask the project setup questions.
-4. Fill or approve the required context files.
-5. Let Product Owner call Spec Writer after a requirement is approved.
-6. Let Tech Lead plan approved specs into waves and tasks.
-7. Let Agent Recruiter create project-specific agents when the stack requires it.
-8. Let Skill Builder create or recommend skills for those agents.
-9. Let Orchestrator coordinate execution.
-10. Review quality gates before accepting the work.
 
 ## Design principles
 
