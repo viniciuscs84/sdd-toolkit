@@ -344,6 +344,13 @@ Do not use ad hoc Orchestrator tasks to bypass the Product Owner or Tech Lead.
 
 See `SECURITY.md` before sharing a customized version.
 
+## Author
+
+Created and maintained by **Vinícius Santos**.
+
+- GitHub: https://github.com/viniciuscs84
+- LinkedIn: https://www.linkedin.com/in/viniciuscs/
+
 ## License
 
 MIT, unless otherwise changed by the repository owner.
