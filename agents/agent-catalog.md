@@ -9,7 +9,7 @@ Use `agent-blueprints/` when a project needs stack-specific implementation, repo
 ## Human-facing agents
 
 - `product-owner.md`: configures the project with the human, clarifies product goals, identifies definition gaps, asks required setup questions, owns product-context decisions and calls subagents to record approved setup work. It must not infer technical details.
-- `env-configr.md`: configures the development and AI-agent environment with the human or Product Owner, including AI platform, model routing, communication rules, setup scripts and environment-specific instructions for Agent Recruiter and Skill Builder.
+- `env-configr.md`: configures the development and AI-agent environment with the human or Product Owner, including AI platform, MCPs, readiness rules, model routing, communication rules, setup scripts and environment-specific instructions for Agent Recruiter and Skill Builder.
 - `tech-lead.md`: plans approved specs into coherent waves and executable tasks with consistent dependencies, required agents, skills and validation. It interacts with humans for technical planning and delegates execution to the Orchestrator.
 - `orchestrator.md`: coordinates execution for planned tasks from the Tech Lead and explicit human-approved ad hoc tasks. It identifies capable agents, calls them, enforces document consistency and ensures quality gates are followed.
 
@@ -59,6 +59,14 @@ Use templates to keep specs, waves and tasks traceable:
 - `docs/templates/wave-template.md`: wave planning template with spec traceability and planning preconditions.
 - `docs/templates/task-template.md`: executable task template with spec/wave traceability, agents, skills, validation and gates.
 
+## Configuration templates
+
+Use configuration templates to adapt SDD Toolkit to the project and platform:
+
+- `config/model-routing.example.yml`: model profiles, routing rules and communication defaults.
+- `config/mcp-config.example.yml`: MCP server policy, readiness and safety rules.
+- `config/readiness-matrix.example.yml`: stage-based definition readiness matrix.
+
 ## Context folder
 
 The `context/` folder stores agent-facing operational context:
@@ -75,6 +83,25 @@ The `context/` folder stores agent-facing operational context:
 
 Product Owner owns product-context decisions. Context Maintainer keeps the context folder accurate, concise and consistent.
 
+## Readiness and blocking rules
+
+Not every definition is required at project start.
+
+Definitions and configurations should be classified as:
+
+- `mandatory_now`: required before the current stage can proceed.
+- `optional_now`: useful now, but not required to proceed.
+- `later_stage`: not required now; required only when a later stage or task needs it.
+- `not_applicable`: not required for this project or task.
+
+Examples:
+
+- Deployment environment is not required during early project setup, but is mandatory when deploy is requested.
+- Database credentials are not required during early project setup, but are mandatory when a task must connect to a real database.
+- MCP servers are optional at project start, but mandatory when a task requires external access through MCP.
+
+When a missing definition blocks progress, the active agent must tell the human which definition is missing, why it is required now, which stage or task it blocks and which agent should resolve it.
+
 ## Communication rules
 
 - Inter-agent communication defaults to English.
@@ -87,39 +114,43 @@ Product Owner owns product-context decisions. Context Maintainer keeps the conte
 ## Recommended flow
 
 1. Product Owner asks the human the questions needed to configure the project.
-2. Product Owner identifies definition gaps and calls Env Configr for environment, AI platform, model routing and communication setup.
-3. Env Configr calls Agent Recruiter and Skill Builder with platform-specific and environment-specific instructions when needed.
-4. Product Owner calls subagents to record approved setup work.
-5. Product Owner tells the human when the project is ready to start execution planning.
-6. Product Owner debates and approves requirements with the human stakeholder.
-7. Product Owner calls Context Maintainer when product or business context changes.
-8. Product Owner calls Spec Writer.
-9. Spec Writer writes the SDD specification using `docs/templates/spec-template.md`.
-10. Tech Lead verifies the approved spec, stack, required agents and required skills before planning.
-11. Tech Lead plans specs into coherent waves and tasks using `docs/templates/wave-template.md` and `docs/templates/task-template.md`.
-12. Tech Lead validates dependencies and keeps project/task-management systems consistent by calling the recruited specialist when integration exists.
-13. Tech Lead calls Context Maintainer when planning creates or reveals durable technical context.
-14. Tech Lead calls Agent Recruiter when implementation requires stack-specific, repository or project-management agents.
-15. Agent Recruiter asks Skill Builder which skills recruited agents need.
-16. Skill Builder researches, recommends or drafts required skills.
-17. Agent Recruiter creates or configures agents from blueprints and assigns required skills.
-18. Tech Lead calls Orchestrator with task details when planned execution is needed.
-19. Orchestrator identifies capable agents, calls them and coordinates execution.
-20. Orchestrator may also coordinate explicit human-approved ad hoc tasks when scope and risk are clear.
-21. Quality gate subagents validate `review`, `tests`, `acceptance` and `security`.
-22. Orchestrator ensures document consistency updates are handled by Context Maintainer, Docs Maintainer or project-management specialists.
-23. Context Maintainer updates current state when relevant.
-24. Docs Maintainer updates human-facing documentation before wave closure.
+2. Product Owner identifies definition gaps and calls Env Configr for environment, AI platform, MCP, readiness, model routing and communication setup.
+3. Env Configr classifies missing definitions as mandatory now, optional now, later stage or not applicable.
+4. Env Configr calls Agent Recruiter and Skill Builder with platform-specific and environment-specific instructions when needed.
+5. Product Owner calls subagents to record approved setup work.
+6. Product Owner tells the human when the project is ready to start execution planning.
+7. Product Owner debates and approves requirements with the human stakeholder.
+8. Product Owner calls Context Maintainer when product or business context changes.
+9. Product Owner calls Spec Writer.
+10. Spec Writer writes the SDD specification using `docs/templates/spec-template.md`.
+11. Tech Lead verifies the approved spec, stack, required agents and required skills before planning.
+12. Tech Lead plans specs into coherent waves and tasks using `docs/templates/wave-template.md` and `docs/templates/task-template.md`.
+13. Tech Lead validates dependencies and keeps project/task-management systems consistent by calling the recruited specialist when integration exists.
+14. Tech Lead calls Context Maintainer when planning creates or reveals durable technical context.
+15. Tech Lead calls Agent Recruiter when implementation requires stack-specific, repository or project-management agents.
+16. Agent Recruiter asks Skill Builder which skills recruited agents need.
+17. Skill Builder researches, recommends or drafts required skills.
+18. Agent Recruiter creates or configures agents from blueprints and assigns required skills.
+19. Tech Lead calls Orchestrator with task details when planned execution is needed.
+20. Orchestrator identifies capable agents, calls them and coordinates execution.
+21. Orchestrator may also coordinate explicit human-approved ad hoc tasks when scope and risk are clear.
+22. Quality gate subagents validate `review`, `tests`, `acceptance` and `security`.
+23. Orchestrator ensures document consistency updates are handled by Context Maintainer, Docs Maintainer or project-management specialists.
+24. Context Maintainer updates current state when relevant.
+25. Docs Maintainer updates human-facing documentation before wave closure.
 
 ## Mandatory rules
 
 - Product Owner, Env Configr, Tech Lead and Orchestrator are available to humans.
 - All other active agents are subagents.
 - Product Owner must ask for missing project definitions and must not infer technical details.
-- Product Owner must call Env Configr during early project setup when environment, AI platform, model routing or communication rules are undefined.
+- Product Owner must call Env Configr during early project setup when environment, AI platform, MCPs, readiness, model routing or communication rules are undefined.
 - Product Owner must notify the human when the project is ready for execution planning.
-- Env Configr must not guess models, subscription features or platform capabilities.
-- Env Configr must pass environment and platform instructions to Agent Recruiter and Skill Builder when they are called.
+- Env Configr must not guess models, subscription features, platform capabilities, MCP server capabilities or credentials.
+- Env Configr must classify missing definitions by readiness level before blocking a stage.
+- Env Configr must pass environment, platform, MCP and readiness instructions to Agent Recruiter and Skill Builder when they are called.
+- MCPs must not block early project setup unless a current task requires them.
+- Credentials must never be stored in repository files.
 - Inter-agent communication must default to English.
 - Agents should use the `caveman` skill for inter-agent and specialized model communication by default.
 - Human interaction and human-facing artifacts must adapt to the human's language.
