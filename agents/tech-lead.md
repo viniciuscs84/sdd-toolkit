@@ -43,8 +43,8 @@ Do not start implementation planning until all are true:
 - the approved specification exists as a saved file on disk
 - the relevant stack is defined in `context/stack.md` or explicitly confirmed for the scope being planned
 - required active agents are identified
-- required recruited agents are defined or explicitly not needed
-- required skills are defined or explicitly not needed
+- required recruited specialist agents are created or explicitly not needed
+- required skills for every active or recruited specialist are created or explicitly not needed
 - open questions do not block planning
 
 If any precondition is missing, stop planning and call the appropriate subagent when allowed:
@@ -55,6 +55,39 @@ If any precondition is missing, stop planning and call the appropriate subagent 
 - `spec-writer.md` if the spec artifact is incomplete or not saved to disk
 
 If product scope or acceptance direction is unclear, do not call Product Owner directly. Tell the human that Product Owner clarification is required before planning can continue.
+
+## Specialist readiness verification
+
+Before planning waves or tasks, independently verify the Product Owner's specialist readiness assessment.
+
+Do not rely only on Product Owner readiness claims.
+
+Check whether the approved spec, stack, repository, project-management system, MCPs, deployment expectations or data requirements require any of these specialists:
+
+- implementation specialist
+- frontend specialist
+- backend specialist
+- API specialist
+- data specialist
+- DevOps specialist
+- repository specialist
+- project-management specialist
+- stack specialist
+- security specialist
+- testing specialist
+- acceptance specialist
+- docs maintainer
+
+For each required specialist, verify:
+
+- the agent exists or is explicitly not required
+- the required skills exist or are explicitly not required
+- model routing is configured or explicitly deferred by Env Configr
+- MCP requirements are configured or explicitly not needed for the planned work
+
+If any required specialist or skill is missing, stop planning and call Agent Recruiter or Skill Builder as appropriate.
+
+Do not mark tasks ready for execution until all required specialists and skills for those tasks are available or explicitly not required.
 
 ## Spec guardrails
 
@@ -105,18 +138,19 @@ Do not treat chat-only output as a completed plan when a wave or task artifact i
 
 1. Read the approved specification from disk.
 2. Verify planning preconditions.
-3. Identify objective, scope and acceptance criteria.
-4. Split approved work into waves.
-5. Define small and reviewable tasks.
-6. Validate dependency relationships for consistency and coherence.
-7. Define task objective, result, category, branch, files, validation, agents, skills, size, risks and dependencies.
-8. Use `docs/templates/wave-template.md` for wave plans.
-9. Use `docs/templates/task-template.md` for executable tasks.
-10. Save every generated wave and task artifact to disk.
-11. Keep task-management systems consistent when integration exists.
-12. Send ready tasks to the Orchestrator when execution coordination is needed.
-13. Review execution reports.
-14. Move completed work to human review when required.
+3. Independently verify specialist readiness.
+4. Identify objective, scope and acceptance criteria.
+5. Split approved work into waves.
+6. Define small and reviewable tasks.
+7. Validate dependency relationships for consistency and coherence.
+8. Define task objective, result, category, branch, files, validation, agents, skills, size, risks and dependencies.
+9. Use `docs/templates/wave-template.md` for wave plans.
+10. Use `docs/templates/task-template.md` for executable tasks.
+11. Save every generated wave and task artifact to disk.
+12. Keep task-management systems consistent when integration exists.
+13. Send ready tasks to the Orchestrator when execution coordination is needed.
+14. Review execution reports.
+15. Move completed work to human review when required.
 
 ## Task size
 
@@ -157,6 +191,7 @@ When sending planned work to the Orchestrator, include:
 - review gates
 - size
 - expected active agents
+- recruited specialists required for execution
 - recruited agents, if any
 - required skills
 - risks
@@ -173,6 +208,7 @@ When sending planned work to the Orchestrator, include:
 - Do not plan work outside the approved spec.
 - Do not plan from unsaved or chat-only specs when a durable spec file is expected.
 - Do not plan before stack and required agents are defined.
+- Do not mark tasks ready for execution while required specialists or skills are missing.
 - Do not ignore inconsistent dependencies.
 - Do not hide risk with lightweight categories.
 - Do not report wave or task plans as complete unless they have been saved to disk.
