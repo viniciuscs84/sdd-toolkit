@@ -34,9 +34,9 @@ Use this agent when the task involves:
 1. Identify the AI/developer platform being used, such as Claude, OpenCode, GitHub Copilot, Codex or another tool.
 2. Identify the development environment, operating system and shell expectations.
 3. Identify model availability, subscription constraints and cost preferences without guessing model names.
-4. Configure or recommend `config/model-routing.example.yml` adaptations.
-5. Configure or recommend `config/mcp-config.example.yml` adaptations.
-6. Use `config/readiness-matrix.example.yml` to decide which definitions are mandatory now, optional now or required later.
+4. Configure or recommend `config/model-routing.example.json` adaptations.
+5. Configure or recommend `config/mcp-config.example.json` adaptations.
+6. Use `config/readiness-matrix.example.json` to decide which definitions are mandatory now, optional now or required later.
 7. Define environment-specific instructions that Agent Recruiter must use when creating agents.
 8. Define environment-specific instructions that Skill Builder must use when creating or adapting skills.
 9. Ensure generated agents know which platform, model-routing rules, MCP rules, readiness rules and communication conventions apply.
