@@ -2,14 +2,15 @@
 
 This directory defines the agent roles used by the SDD Toolkit.
 
-The main human-facing agents are `product-owner.md` and `tech-lead.md`. All other agents are subagents called by the Product Owner, Tech Lead, Orchestrator or another specialist when their focused responsibility is needed.
+The human-facing agents are `product-owner.md`, `tech-lead.md` and `orchestrator.md`. Other agents are subagents called by the Product Owner, Tech Lead, Orchestrator or another specialist when their focused responsibility is needed.
 
 Use `agent-blueprints/` when a project needs stack-specific implementation, repository or project-management agents.
 
-## Primary agents
+## Human-facing agents
 
-- `product-owner.md`: clarifies product goals, user value, scope, priorities and acceptance criteria with the human stakeholder before technical planning starts. It owns product-context decisions.
-- `tech-lead.md`: turns approved specs into waves and executable tasks only after stack, required agents and required skills are defined. It must not plan work outside the approved spec and does not change code directly.
+- `product-owner.md`: configures the project with the human, clarifies product goals, identifies definition gaps, asks required setup questions, owns product-context decisions and calls subagents to record approved setup work. It must not infer technical details.
+- `tech-lead.md`: plans approved specs into coherent waves and executable tasks with consistent dependencies, required agents, skills and validation. It interacts with humans for technical planning and delegates execution to the Orchestrator.
+- `orchestrator.md`: coordinates execution for planned tasks from the Tech Lead and explicit human-approved ad hoc tasks. It identifies capable agents, calls them, enforces document consistency and ensures quality gates are followed.
 
 ## Coordination subagents
 
@@ -17,7 +18,6 @@ Use `agent-blueprints/` when a project needs stack-specific implementation, repo
 - `spec-writer.md`: writes formal SDD specifications from requirements approved by the Product Owner and the human stakeholder.
 - `agent-recruiter.md`: recruits and configures project-specific implementation agents from `agent-blueprints/`.
 - `skill-builder.md`: creates, adapts or recommends skills required by recruited agents, using official documentation, web research and optionally skills.sh with a user-provided token.
-- `orchestrator.md`: coordinates planned tasks when called by the Tech Lead and may coordinate explicit human-approved ad hoc tasks. It does not implement code directly.
 
 ## Quality gate subagents
 
@@ -76,32 +76,43 @@ Product Owner owns product-context decisions. Context Maintainer keeps the conte
 
 ## Recommended flow
 
-1. Product Owner debates and approves the requirement with the human stakeholder.
-2. Product Owner calls Context Maintainer when product or business context changes.
-3. Product Owner calls Spec Writer.
-4. Spec Writer writes the SDD specification using `templates/spec-template.md`.
-5. Tech Lead verifies the approved spec, stack, required agents and required skills before planning.
-6. Tech Lead turns the spec into waves and tasks using `templates/wave-template.md` and `templates/task-template.md`.
-7. Tech Lead calls Context Maintainer when planning creates or reveals durable technical context.
-8. Tech Lead calls Agent Recruiter when implementation requires stack-specific, repository or project-management agents.
-9. Agent Recruiter asks Skill Builder which skills recruited agents need.
-10. Skill Builder researches, recommends or drafts required skills.
-11. Agent Recruiter creates or configures agents from blueprints and assigns required skills.
-12. Tech Lead calls Orchestrator when planned execution coordination is needed.
-13. Orchestrator coordinates execution using active subagents and recruited agents.
-14. Orchestrator may coordinate explicit human-approved ad hoc tasks when scope and risk are clear.
-15. Quality gate subagents validate `review`, `tests`, `acceptance` and `security`.
-16. Context Maintainer updates current state when relevant.
-17. Docs Maintainer updates human-facing documentation before wave closure.
+1. Product Owner asks the human the questions needed to configure the project.
+2. Product Owner identifies definition gaps and calls subagents to record approved setup work.
+3. Product Owner tells the human when the project is ready to start execution planning.
+4. Product Owner debates and approves requirements with the human stakeholder.
+5. Product Owner calls Context Maintainer when product or business context changes.
+6. Product Owner calls Spec Writer.
+7. Spec Writer writes the SDD specification using `templates/spec-template.md`.
+8. Tech Lead verifies the approved spec, stack, required agents and required skills before planning.
+9. Tech Lead plans specs into coherent waves and tasks using `templates/wave-template.md` and `templates/task-template.md`.
+10. Tech Lead validates dependencies and keeps project/task-management systems consistent by calling the recruited specialist when integration exists.
+11. Tech Lead calls Context Maintainer when planning creates or reveals durable technical context.
+12. Tech Lead calls Agent Recruiter when implementation requires stack-specific, repository or project-management agents.
+13. Agent Recruiter asks Skill Builder which skills recruited agents need.
+14. Skill Builder researches, recommends or drafts required skills.
+15. Agent Recruiter creates or configures agents from blueprints and assigns required skills.
+16. Tech Lead calls Orchestrator with task details when planned execution is needed.
+17. Orchestrator identifies capable agents, calls them and coordinates execution.
+18. Orchestrator may also coordinate explicit human-approved ad hoc tasks when scope and risk are clear.
+19. Quality gate subagents validate `review`, `tests`, `acceptance` and `security`.
+20. Orchestrator ensures document consistency updates are handled by Context Maintainer, Docs Maintainer or project-management specialists.
+21. Context Maintainer updates current state when relevant.
+22. Docs Maintainer updates human-facing documentation before wave closure.
 
 ## Mandatory rules
 
-- Product Owner and Tech Lead are the primary human-facing agents.
+- Product Owner, Tech Lead and Orchestrator are available to humans.
 - All other active agents are subagents.
+- Product Owner must ask for missing project definitions and must not infer technical details.
+- Product Owner must notify the human when the project is ready for execution planning.
 - Tech Lead must not plan work outside the approved spec.
 - Tech Lead must not start planning until stack, required agents and required skills are defined or explicitly not needed.
-- Orchestrator is called by Tech Lead for planned execution coordination.
+- Tech Lead must keep task dependencies consistent and coherent.
+- Tech Lead must use a project-management specialist when task-management integration exists and milestones/tasks need synchronization.
+- Tech Lead must call Orchestrator to execute planned tasks.
 - Orchestrator may receive human-approved ad hoc tasks, but must route product scope, architecture, security, data model or release-impacting work back to Product Owner or Tech Lead.
+- Orchestrator must identify capable agents and call them; it does not implement code directly.
+- Orchestrator must enforce document consistency and quality gates.
 - Product Owner approves requirements with the human before calling Spec Writer.
 - Product Owner owns product-context decisions.
 - Context Maintainer maintains `context/`; it does not approve product decisions.
@@ -110,7 +121,6 @@ Product Owner owns product-context decisions. Context Maintainer keeps the conte
 - Agent Recruiter creates or configures agents; it does not implement project features.
 - Skill Builder creates, adapts or recommends skills; it does not implement project features or recruit agents.
 - Skill Builder may use skills.sh only when the user provides their own authentication token for the current task.
-- The Orchestrator does not implement code directly.
 - Every task must report `review`, `tests`, `acceptance` and `security` gates.
 - Lightweight task categories may simplify checklists, but do not remove gates.
 - Tasks with potential security impact must call `cybersecurity-specialist.md` at the beginning and end.
