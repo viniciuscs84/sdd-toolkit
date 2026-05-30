@@ -1,6 +1,6 @@
 ---
 description: Recruits and configures stack-specific implementation agents from blueprints, coordinating with Skill Builder to assign the skills each agent needs for the project.
-mode: all
+mode: subagent
 ---
 
 # Agent Recruiter Agent
