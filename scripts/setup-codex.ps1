@@ -29,6 +29,7 @@ Use the SDD Toolkit files under `.codex/sdd-toolkit/`.
 Human-facing agents:
 
 - `.codex/sdd-toolkit/agents/product-owner.md`
+- `.codex/sdd-toolkit/agents/env-configr.md`
 - `.codex/sdd-toolkit/agents/tech-lead.md`
 - `.codex/sdd-toolkit/agents/orchestrator.md`
 
@@ -37,7 +38,9 @@ Workflow:
 - Read `.codex/sdd-toolkit/context/workflow.md` before coordinating SDD work.
 - Use `.codex/sdd-toolkit/templates/` for specs, waves and tasks.
 - Use `.codex/sdd-toolkit/agent-blueprints/` only when project-specific agents must be recruited.
-- Adapt `.codex/sdd-toolkit/config/model-routing.example.yml` to the models available in this project.
+- Adapt `.codex/sdd-toolkit/config/model-routing.example.json` to the models available in this project.
+- Adapt `.codex/sdd-toolkit/config/mcp-config.example.json` when MCPs are needed.
+- Use `.codex/sdd-toolkit/config/readiness-matrix.example.json` to decide which definitions block the current stage.
 
 Execution rules:
 
